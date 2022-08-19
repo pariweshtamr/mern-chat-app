@@ -6,11 +6,12 @@ export const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
   background-color: #e6eaef;
   .brand {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 1rem;
     justify-content: center;
@@ -20,6 +21,10 @@ export const FormContainer = styled.div`
     h1 {
       color: #000;
       text-transform: uppercase;
+      span {
+        color: #2679bc;
+        font-weight: 500;
+      }
     }
   }
   form {
@@ -28,8 +33,7 @@ export const FormContainer = styled.div`
     gap: 2rem;
     background-color: #f6f6f6;
     border-radius: 2rem;
-    padding: 4rem 5rem;
-    width: 30%;
+    padding: 3rem;
     input {
       background-color: #fefefe;
       padding: 1rem;
@@ -53,22 +57,21 @@ export const FormContainer = styled.div`
       border: none;
       font-size: 1rem;
       text-transform: uppercase;
-      transition: all 5s ease;
+      transition: 0.5s ease;
       letter-spacing: 1px;
       cursor: pointer;
-
       &:hover {
         background: linear-gradient(90deg, #2cbdac, #2ec6a2, #31c9a2);
 
-        transition: 5s ease all;
+        transition: 0.5s ease all;
       }
     }
-
     span {
       color: #000;
-      font-weight: 600;
+      font-weight: 400;
       text-transform: uppercase;
       text-align: center;
+      letter-spacing: 1px;
       a {
         color: #2679bc;
         text-decoration: none;
