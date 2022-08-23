@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Alert, Col, Container, Row, Toast } from "react-bootstrap"
+import { Alert, Col, Container, Row, Spinner, Toast } from "react-bootstrap"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { FormContainer } from "./registerStyles"
 import logo from "../../assets/logo.png"
@@ -15,8 +15,7 @@ const Register = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [error, setError] = useState("")
-  const { isLoading, response } = useSelector((state) => state.user)
+  const { isLoading } = useSelector((state) => state.user)
 
   const toastOptions = {
     position: "top-left",
@@ -68,36 +67,47 @@ const Register = () => {
                   Chat <span>App</span>
                 </h1>
               </div>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <input
-                type="text"
-                placeholder="Username"
-                name="username"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
-              />
-              <input
-                type="email"
-                placeholder="Email"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-              />
-              <input
-                type="password"
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                value={confirmPassword}
-              />
-              <button type="submit">Sign Up</button>
+              <div className="form-inputs">
+                <input
+                  type="text"
+                  placeholder="Username"
+                  name="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+                <input
+                  type="password"
+                  placeholder="Password"
+                  name="password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  value={password}
+                />
+                <input
+                  type="password"
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={confirmPassword}
+                />
+              </div>
+              <button type="submit">
+                {isLoading ? (
+                  <Spinner
+                    animation="grow"
+                    variant="light"
+                    className="spinner"
+                  />
+                ) : (
+                  "Sign Up"
+                )}
+              </button>
               <span>
                 Already have an account? <Link to="/login">Login</Link>
               </span>

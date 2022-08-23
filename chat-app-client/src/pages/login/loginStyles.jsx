@@ -34,6 +34,7 @@ export const FormContainer = styled.div`
     background-color: #f6f6f6;
     border-radius: 2rem;
     padding: 3rem;
+
     .form-inputs {
       display: flex;
       flex-direction: column;
@@ -66,9 +67,12 @@ export const FormContainer = styled.div`
       transition: 0.5s ease;
       letter-spacing: 1px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       &:hover {
         background: linear-gradient(90deg, #2cbdac, #2ec6a2, #31c9a2);
-
         transition: 0.5s ease all;
       }
     }

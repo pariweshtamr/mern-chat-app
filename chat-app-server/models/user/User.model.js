@@ -9,3 +9,13 @@ export const registerUser = (newUser) => {
     console.log(error)
   }
 }
+
+// Get user bu username
+export const getUserByUsername = (username) => {
+  try {
+    const user = User.findOne({ username })
+    return user
+  } catch (error) {
+    console.log(error)
+  }
+}

@@ -33,7 +33,7 @@ const userSlice = createSlice({
       state.isLoading = false
       state.error = payload || {}
     },
-    logoutSuccess: (state, { payload }) => {
+    logoutSuccess: (state) => {
       state.user = {}
       state.isLoggedIn = false
     },

@@ -11,6 +11,15 @@ export const registerUser = async (newUser) => {
     const { data } = await axios.post(authEp + "/register", newUser)
     return data
   } catch (error) {
-    return error.data.response
+    return error.response.data
+  }
+}
+
+export const loginUser = async (user) => {
+  try {
+    const { data } = await axios.post(authEp + "/login", user)
+    return data
+  } catch (error) {
+    return error.response.data
   }
 }
