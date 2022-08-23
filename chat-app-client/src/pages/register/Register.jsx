@@ -1,13 +1,16 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Alert, Col, Container, Row, Toast } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import { FormContainer } from "./registerStyles"
 import logo from "../../assets/logo.png"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import { userRegister } from "../../redux/User/UserAction"
 
 const Register = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -30,9 +33,10 @@ const Register = () => {
       confirmPassword === "" ||
       email === ""
     ) {
-      toast.error("Please enter all the fields.")
+      toast.error("Please enter all the required fields.")
       return
     }
+
     if (password !== confirmPassword) {
       toast.error("Password and confirm password must be same", toastOptions)
     } else if (username.length < 3) {
@@ -42,7 +46,14 @@ const Register = () => {
         "Password must be at least 8 characters or longer",
         toastOptions
       )
+      return
     }
+
+    dispatch(userRegister({ username, password, email }))
+
+    setTimeout(() => {
+      navigate("/")
+    }, 4000)
   }
   return (
     <FormContainer>

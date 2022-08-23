@@ -18,6 +18,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 
+//Import Routes
+import authRouter from "./routes/authRouter.js"
+
+//Use routes
+app.use("/api/v1/auth", authRouter)
+
 app.use((error, req, res, next) => {
   const errorStatus = error.status || 500
   const errorMessage = error.message || "Something went wrong!"

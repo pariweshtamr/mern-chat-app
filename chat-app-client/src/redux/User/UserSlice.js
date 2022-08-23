@@ -17,7 +17,8 @@ const userSlice = createSlice({
     },
     registerSuccess: (state, { payload }) => {
       state.isLoading = false
-      state.response = payload || {}
+      state.user = payload || {}
+      state.isLoggedIn = true
     },
     requestFail: (state, { payload }) => {
       state.isLoading = false
