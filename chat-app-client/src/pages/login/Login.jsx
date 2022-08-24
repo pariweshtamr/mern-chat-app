@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Alert, Col, Container, Row, Spinner, Toast } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
@@ -28,13 +28,17 @@ const Login = () => {
       toast.error("Please enter all the required fields.", toastOptions)
       return
     }
-
     dispatch(userLogin({ username, password }))
-
     setTimeout(() => {
       navigate("/")
     }, 3000)
   }
+
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/")
+    }
+  }, [])
   return (
     <FormContainer>
       <ToastContainer />

@@ -20,9 +20,11 @@ app.use(cors())
 
 //Import Routes
 import authRouter from "./routes/authRouter.js"
+import userRouter from "./routes/userRoute.js"
 
 //Use routes
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/user", userRouter)
 
 app.use((error, req, res, next) => {
   const errorStatus = error.status || 500

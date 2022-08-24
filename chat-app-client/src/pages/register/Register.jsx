@@ -1,6 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Alert, Col, Container, Row, Spinner, Toast } from "react-bootstrap"
+import { Col, Container, Row, Spinner, Toast } from "react-bootstrap"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { FormContainer } from "./registerStyles"
 import logo from "../../assets/logo.png"
@@ -54,6 +54,12 @@ const Register = () => {
       navigate("/")
     }, 4000)
   }
+
+  useEffect(() => {
+    if (localStorage.getItem("chat-app-user")) {
+      navigate("/")
+    }
+  }, [])
   return (
     <FormContainer>
       <ToastContainer />

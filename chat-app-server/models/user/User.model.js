@@ -10,10 +10,20 @@ export const registerUser = (newUser) => {
   }
 }
 
-// Get user bu username
+// Get user by username
 export const getUserByUsername = (username) => {
   try {
     const user = User.findOne({ username })
+    return user
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// update user
+export const getByIdAndUpdate = (_id, update) => {
+  try {
+    const user = User.findByIdAndUpdate(_id, update)
     return user
   } catch (error) {
     console.log(error)
