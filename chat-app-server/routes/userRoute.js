@@ -1,19 +1,31 @@
-import express from "express"
-import { getByIdAndUpdate } from "../models/user/User.model.js"
+import express, { request } from "express"
+import { getAllUsers, getByIdAndUpdate } from "../models/user/User.model.js"
 
 const userRouter = express.Router()
 
-userRouter.patch("/:id", async (req, res, next) => {
+userRouter.get("/all/:_id", async (req, res, next) => {
   try {
-    console.log(req.body)
+    // get all other users from db expect for your own data (here: _id in params is your id)
+    const users = await getAllUsers({ _id: { $ne: req.params._id } }).select([
+      "email",
+      "username",
+      "avatarImage",
+      " _id",
+    ])
+    return res.status(200).json({ status: "success", users })
+  } catch (error) {
+    next(error)
+  }
+})
+
+userRouter.patch("/:_id", async (req, res, next) => {
+  try {
     const { _id } = req.params
-    console.log(_id)
     const avatarImage = req.body.image
     const userData = await getByIdAndUpdate(_id, {
       isAvatarImageSet: true,
       avatarImage,
     })
-
     return res.status(200).json({
       status: "success",
       message: "User avatar has been set.",

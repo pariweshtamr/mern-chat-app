@@ -30,6 +30,9 @@ export const AvatarContainer = styled.div`
       height: 7rem;
       width: 7rem;
       cursor: pointer;
+      &:hover {
+        transform: scale(1.1);
+      }
 
       img {
         height: 100%;

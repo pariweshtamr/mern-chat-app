@@ -14,3 +14,12 @@ export const setAvatar = async (_id, image) => {
     return error.response.data
   }
 }
+
+export const getAllUsers = async (_id) => {
+  try {
+    const { data } = await axios.get(userEp + `/all/${_id}`)
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}

@@ -2,7 +2,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast, ToastContainer } from "react-toastify"
-import { AvatarContainer } from "./avatarStyles"
+import { AvatarContainer } from "./AvatarStyles"
 import { Buffer } from "buffer"
 import { Spinner } from "react-bootstrap"
 import { setAvatar } from "../../api/userApi"
@@ -29,7 +29,6 @@ const Avatar = () => {
 
     const user = await JSON.parse(localStorage.getItem("chat-app-user"))
     const data = await setAvatar(user._id, { image: avatars[selectedAvatar] })
-    console.log(data)
     if (data?.status === "success") {
       user.isAvatarImageSet = true
       user.avatarImage = data.image
@@ -39,6 +38,12 @@ const Avatar = () => {
       toast.error("Error setting avatar. Please try again later", toastOptions)
     }
   }
+
+  useEffect(() => {
+    if (!localStorage.getItem("chat-app-user")) {
+      navigate("/login")
+    }
+  }, [])
 
   useEffect(() => {
     const data = []

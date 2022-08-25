@@ -10,6 +10,16 @@ export const registerUser = (newUser) => {
   }
 }
 
+// Get all users
+export const getAllUsers = (filter) => {
+  try {
+    const user = User.find(filter)
+    return user
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 // Get user by username
 export const getUserByUsername = (username) => {
   try {
