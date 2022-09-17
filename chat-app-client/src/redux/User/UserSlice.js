@@ -1,44 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  user: {},
-  isLoggedIn: false,
-  isLoading: false,
-  response: {},
-  error: {},
+  user: null,
 }
 
 const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
-    requestPending: (state) => {
-      state.isLoading = true
-    },
-    requestSuccess: (state, { payload }) => {
-      state.isLoading = false
-      state.response = payload
-    },
-    registerSuccess: (state, { payload }) => {
-      state.isLoading = false
+    login: (state, { payload }) => {
       state.user = payload || {}
-      state.isLoggedIn = true
     },
-    requestFail: (state, { payload }) => {
-      state.isLoading = false
-      state.error = payload || {}
-    },
-    loginSuccess: (state, { payload }) => {
-      state.isLoading = false
-      state.user = payload || {}
-      state.isLoggedIn = true
-    },
-    loginFailure: (state, { payload }) => {
-      state.isLoading = false
-      state.error = payload || {}
-    },
-    logoutSuccess: (state) => {
-      state.user = {}
+
+    logout: (state) => {
+      state.user = null
       state.isLoggedIn = false
     },
   },
@@ -46,14 +21,6 @@ const userSlice = createSlice({
 
 const { reducer, actions } = userSlice
 
-export const {
-  requestPending,
-  requestFail,
-  requestSuccess,
-  registerSuccess,
-  loginSuccess,
-  loginFailure,
-  logoutSuccess,
-} = actions
+export const { login, logout } = actions
 
 export default reducer

@@ -1,16 +1,37 @@
 import { ChatsContainer } from "./ChatsStyles"
-import user from "../../assets/user1.jpeg"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import { doc, onSnapshot } from "firebase/firestore"
+import { db } from "../../firebase"
 
 const Chats = () => {
+  const [chats, setChats] = useState([])
+  const { user } = useSelector((state) => state.user)
+  useEffect(() => {
+    const getChats = () => {
+      const unsub = onSnapshot(doc(db, "userChats", user.uid), (doc) => {
+        setChats(doc.data())
+      })
+
+      return () => {
+        unsub()
+      }
+    }
+    user.uid && getChats()
+  }, [user.uid])
+
   return (
     <ChatsContainer>
-      <div className="userChat">
-        <img src={user} alt="" />
-        <div className="userChatInfo">
-          <span>Jane</span>
-          <p>hello</p>
+      {/* convert object into array */}
+      {Object.entries(chats)?.map((chat) => (
+        <div className="userChat" key={chat[0]}>
+          <img src={chat[1].userInfo.photoURL} alt="" />
+          <div className="userChatInfo">
+            <span>{chat[1].userInfo.displayName}</span>
+            <p>{chat[1].lastMessage?.text}</p>
+          </div>
         </div>
-      </div>
+      ))}
     </ChatsContainer>
   )
 }

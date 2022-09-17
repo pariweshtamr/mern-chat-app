@@ -3,7 +3,7 @@ import user from "../../assets/user2.jpeg"
 
 const Message = () => {
   return (
-    <MessageContainer>
+    <MessageContainer owner>
       <div className="messageInfo">
         <img src={user} alt="" />
         <span>Just now</span>

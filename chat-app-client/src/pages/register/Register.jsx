@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Col, Container, Row, Spinner, Toast } from "react-bootstrap"
-import { Link, Navigate, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { FormContainer } from "./RegisterStyles"
 import logo from "../../assets/logo.png"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { userRegister } from "../../redux/User/UserAction"
 import addImage from "../../assets/addAvatar.png"
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { auth, storage, db } from "../../firebase"
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { doc, setDoc } from "firebase/firestore"
 
 const Register = () => {
   const dispatch = useDispatch()
+  const [error, setError] = useState(false)
   const navigate = useNavigate()
-  const [username, setUsername] = useState("")
+  const [displayName, setDisplayName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
+  const [file, setFile] = useState("")
   const { isLoading } = useSelector((state) => state.user)
 
   const toastOptions = {
@@ -25,10 +30,10 @@ const Register = () => {
     draggable: true,
   }
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault()
     if (
-      username === "" ||
+      displayName === "" ||
       password === "" ||
       confirmPassword === "" ||
       email === ""
@@ -39,7 +44,7 @@ const Register = () => {
 
     if (password !== confirmPassword) {
       toast.error("Password and confirm password must be same", toastOptions)
-    } else if (username.length < 3) {
+    } else if (displayName.length < 3) {
       toast.error("Username must be longer than 3 characters", toastOptions)
     } else if (password.length < 8) {
       toast.error(
@@ -49,11 +54,43 @@ const Register = () => {
       return
     }
 
-    dispatch(userRegister({ username, password, email }))
+    try {
+      const res = await createUserWithEmailAndPassword(auth, email, password)
 
-    setTimeout(() => {
-      navigate("/")
-    }, 4000)
+      const storageRef = ref(storage, displayName)
+
+      const uploadTask = uploadBytesResumable(storageRef, file)
+
+      uploadTask.on(
+        (error) => {
+          setError(true)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName,
+              photoURL: downloadURL,
+            })
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            })
+            await setDoc(doc(db, "userChats", res.user.uid), {})
+            navigate("/")
+          })
+        }
+      )
+    } catch (error) {
+      setError(true)
+    }
+
+    // dispatch(userRegister({ username, password, email }))
+
+    // setTimeout(() => {
+    //   navigate("/")
+    // }, 4000)
   }
 
   useEffect(() => {
@@ -77,10 +114,10 @@ const Register = () => {
               <div className="form-inputs">
                 <input
                   type="text"
-                  placeholder="Username"
-                  name="username"
-                  onChange={(e) => setUsername(e.target.value)}
-                  value={username}
+                  placeholder="Display Name"
+                  name="displayName"
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  value={displayName}
                 />
                 <input
                   type="email"
@@ -103,12 +140,18 @@ const Register = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   value={confirmPassword}
                 />
-                <input style={{ display: "none" }} type="file" id="file" />
+                <input
+                  style={{ display: "none" }}
+                  type="file"
+                  id="file"
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
                 <label htmlFor="file">
                   <img src={addImage} alt="" />
                   <span>Add an avatar</span>
                 </label>
               </div>
+              {error && <span>Something went wrong!</span>}
               <button type="submit">
                 {isLoading ? (
                   <Spinner

@@ -6,14 +6,16 @@ import { FormContainer } from "./LoginStyles"
 import logo from "../../assets/logo.png"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { userLogin } from "../../redux/User/UserAction"
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "../../firebase"
 
 const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [username, setUsername] = useState("")
+  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const { isLoading } = useSelector((state) => state.user)
 
   const toastOptions = {
     position: "top-left",
@@ -22,23 +24,23 @@ const Login = () => {
     draggable: true,
   }
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault()
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
       toast.error("Please enter all the required fields.", toastOptions)
       return
     }
-    dispatch(userLogin({ username, password }))
-    setTimeout(() => {
+    try {
+      setLoading(true)
+      await signInWithEmailAndPassword(auth, email, password)
+      setLoading(false)
       navigate("/")
-    }, 3000)
+    } catch (error) {
+      setError(true)
+      setLoading(false)
+    }
   }
 
-  useEffect(() => {
-    if (localStorage.getItem("chat-app-user")) {
-      navigate("/")
-    }
-  }, [])
   return (
     <FormContainer>
       <ToastContainer />
@@ -56,10 +58,10 @@ const Login = () => {
               <div className="form-inputs">
                 <input
                   type="text"
-                  placeholder="Username"
-                  name="username"
-                  onChange={(e) => setUsername(e.target.value)}
-                  value={username}
+                  placeholder="Email"
+                  name="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   min="3"
                 />
 
@@ -72,8 +74,10 @@ const Login = () => {
                 />
               </div>
 
+              {error && <span>Something went wrong!</span>}
+
               <button type="submit">
-                {isLoading ? (
+                {loading ? (
                   <Spinner
                     animation="grow"
                     variant="light"

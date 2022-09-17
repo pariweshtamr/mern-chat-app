@@ -23,11 +23,15 @@ export const MessageContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    align-items: ${(props) => (props.owner ? "flex-end" : "")};
 
     p {
-      background: #e2e7ea;
+      background: ${(props) => (props.owner ? "#2679bc" : "#e2e7ea")};
+      color: ${(props) => (props.owner ? "#fff" : "#000")};
       padding: 10px 15px;
-      border-radius: 0 10px 10px 10px;
+      border-radius: ${(props) =>
+        props.owner ? "10px 0px 10px 10px" : "0 10px 10px 10px"};
+      max-width: max-content;
     }
     img {
       width: 50%;
