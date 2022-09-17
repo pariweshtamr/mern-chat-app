@@ -7,6 +7,7 @@ import logo from "../../assets/logo.png"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { userRegister } from "../../redux/User/UserAction"
+import addImage from "../../assets/addAvatar.png"
 
 const Register = () => {
   const dispatch = useDispatch()
@@ -102,6 +103,11 @@ const Register = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   value={confirmPassword}
                 />
+                <input style={{ display: "none" }} type="file" id="file" />
+                <label htmlFor="file">
+                  <img src={addImage} alt="" />
+                  <span>Add an avatar</span>
+                </label>
               </div>
               <button type="submit">
                 {isLoading ? (
@@ -114,7 +120,7 @@ const Register = () => {
                   "Sign Up"
                 )}
               </button>
-              <span>
+              <span className="form-footer">
                 Already have an account? <Link to="/login">Login</Link>
               </span>
             </form>

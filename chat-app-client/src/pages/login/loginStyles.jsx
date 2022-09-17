@@ -40,18 +40,19 @@ export const FormContainer = styled.div`
       flex-direction: column;
       gap: 1.2rem;
       input {
-        background-color: #fefefe;
+        background: none;
         padding: 1rem;
         border: none;
-        border-radius: 0.5rem;
+        border-bottom: 1px solid #2679bc;
         color: #000;
         width: 100%;
         font-size: 1rem;
         &::placeholder {
           letter-spacing: 1px;
+          color: rgb(175, 175, 175);
         }
         &:focus {
-          outline: 1px solid #2679bc;
+          outline: none;
         }
       }
     }
@@ -65,7 +66,7 @@ export const FormContainer = styled.div`
       font-size: 1rem;
       text-transform: uppercase;
       transition: 0.5s ease;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -76,9 +77,10 @@ export const FormContainer = styled.div`
         transition: 0.5s ease all;
       }
     }
-    span {
+    .form-footer {
       color: #000;
       font-weight: 400;
+      font-size: 14px;
       text-transform: uppercase;
       text-align: center;
       letter-spacing: 1px;
@@ -86,7 +88,7 @@ export const FormContainer = styled.div`
         color: #2679bc;
         text-decoration: none;
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 14px;
         &:hover {
           text-decoration: underline;
         }

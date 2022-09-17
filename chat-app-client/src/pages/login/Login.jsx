@@ -83,7 +83,7 @@ const Login = () => {
                   "Login"
                 )}
               </button>
-              <span>
+              <span className="form-footer">
                 Don't have an account? <Link to="/register">Register</Link>
               </span>
             </form>

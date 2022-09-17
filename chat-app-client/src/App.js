@@ -7,9 +7,8 @@ import {
 } from "react-router-dom"
 import Register from "./pages/register/Register"
 import Login from "./pages/login/Login"
-import Chat from "./pages/chat/Chat"
 import { useSelector } from "react-redux"
-import Avatar from "./pages/avatar/Avatar"
+import Home from "./pages/home/Home"
 
 function App() {
   const { user, isLoggedIn } = useSelector((state) => state.user)
@@ -25,8 +24,7 @@ function App() {
           path="/login"
           element={isLoggedIn ? <Navigate to="/" /> : <Login />}
         ></Route>
-        <Route path="/avatar" element={<Avatar />}></Route>
-        <Route path="/" element={!isLoggedIn ? <Login /> : <Chat />}></Route>
+        <Route path="/" element={<Home />}></Route>
       </Routes>
     </Router>
   )
