@@ -11,36 +11,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth } from "./firebase"
 import Home from "./pages/home/Home"
-import { useEffect, useState } from "react"
-import { login, logout } from "./redux/User/UserSlice"
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "./context/AuthContext"
 
 function App() {
-  const { user } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        dispatch(
-          login({
-            email: user.email,
-            uid: user.uid,
-            displayName: user.displayName,
-            photoUrl: user.photoURL,
-          })
-        )
-      } else {
-        dispatch(logout())
-      }
-    })
-
-    return () => {
-      unsub()
-    }
-  }, [])
+  const { currentUser } = useContext(AuthContext)
 
   const ProtectedRoute = ({ children }) => {
-    if (!user) {
+    if (!currentUser) {
       return <Navigate to="/login" />
     }
     return children

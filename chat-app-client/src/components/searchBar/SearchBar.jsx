@@ -12,10 +12,11 @@ import {
   serverTimestamp,
 } from "firebase/firestore"
 import { db } from "../../firebase"
-import { useSelector } from "react-redux"
+import { useContext } from "react"
+import { AuthContext } from "../../context/AuthContext"
 
 const SearchBar = () => {
-  const { user } = useSelector((state) => state.user)
+  const { currentUser } = useContext(AuthContext)
   const [username, setUsername] = useState("")
   const [searchedUser, setSearchedUser] = useState(null)
   const [error, setError] = useState(false)
@@ -44,9 +45,9 @@ const SearchBar = () => {
   const handleSelect = async () => {
     //check whether the group (chats is firestore) exists if not create new group
     const combinedId =
-      user.uid > searchedUser.uid
-        ? user.uid + searchedUser.uid
-        : searchedUser.uid + user.uid
+      currentUser.uid > searchedUser.uid
+        ? currentUser.uid + searchedUser.uid
+        : searchedUser.uid + currentUser.uid
     try {
       const res = await getDoc(doc(db, "chats", combinedId))
 
@@ -56,7 +57,7 @@ const SearchBar = () => {
       }
 
       // create user chats
-      await updateDoc(doc(db, "userChats", user.uid), {
+      await updateDoc(doc(db, "userChats", currentUser.uid), {
         [combinedId + ".userInfo"]: {
           uid: searchedUser.uid,
           displayName: searchedUser.displayName,
@@ -67,9 +68,9 @@ const SearchBar = () => {
 
       await updateDoc(doc(db, "userChats", searchedUser.uid), {
         [combinedId + ".userInfo"]: {
-          uid: user.uid,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
+          uid: currentUser.uid,
+          displayName: currentUser.displayName,
+          photoURL: currentUser.photoURL,
         },
         [combinedId + ".date"]: serverTimestamp(),
       })

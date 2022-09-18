@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Alert, Col, Container, Row, Spinner, Toast } from "react-bootstrap"
+import React, { useState } from "react"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import { FormContainer } from "./LoginStyles"
 import logo from "../../assets/logo.png"
@@ -10,12 +9,11 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../../firebase"
 
 const Login = () => {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("testPassword.7")
 
   const toastOptions = {
     position: "top-left",

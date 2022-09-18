@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Col, Container, Row, Spinner, Toast } from "react-bootstrap"
+import React, { useState } from "react"
+import { Col, Container, Row, Spinner } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import { FormContainer } from "./RegisterStyles"
 import logo from "../../assets/logo.png"
@@ -13,15 +12,14 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 import { doc, setDoc } from "firebase/firestore"
 
 const Register = () => {
-  const dispatch = useDispatch()
   const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const [displayName, setDisplayName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [file, setFile] = useState("")
-  const { isLoading } = useSelector((state) => state.user)
 
   const toastOptions = {
     position: "top-left",
@@ -55,6 +53,7 @@ const Register = () => {
     }
 
     try {
+      setLoading(true)
       const res = await createUserWithEmailAndPassword(auth, email, password)
 
       const storageRef = ref(storage, displayName)
@@ -82,22 +81,13 @@ const Register = () => {
           })
         }
       )
+      setLoading(false)
     } catch (error) {
       setError(true)
+      setLoading(false)
     }
-
-    // dispatch(userRegister({ username, password, email }))
-
-    // setTimeout(() => {
-    //   navigate("/")
-    // }, 4000)
   }
 
-  useEffect(() => {
-    if (localStorage.getItem("chat-app-user")) {
-      navigate("/")
-    }
-  }, [])
   return (
     <FormContainer>
       <ToastContainer />
@@ -153,7 +143,7 @@ const Register = () => {
               </div>
               {error && <span>Something went wrong!</span>}
               <button type="submit">
-                {isLoading ? (
+                {loading ? (
                   <Spinner
                     animation="grow"
                     variant="light"
