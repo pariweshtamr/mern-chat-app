@@ -1,15 +1,15 @@
 import React, { useState } from "react"
-import { Col, Container, Row, Spinner } from "react-bootstrap"
+import { Spinner } from "react-bootstrap"
+import { Container } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
-import { FormContainer } from "./LoginStyles"
-import logo from "../../assets/logo.png"
+import { LoginContainer } from "./LoginStyles"
 import { ToastContainer, toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { auth } from "../../firebase"
+import { BiShow, BiHide } from "react-icons/bi"
 
 const Login = () => {
   const navigate = useNavigate()
+  const [show, setShow] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
@@ -30,7 +30,6 @@ const Login = () => {
     }
     try {
       setLoading(true)
-      await signInWithEmailAndPassword(auth, email, password)
       setLoading(false)
       navigate("/")
     } catch (error) {
@@ -40,59 +39,48 @@ const Login = () => {
   }
 
   return (
-    <FormContainer>
+    <LoginContainer>
       <ToastContainer />
-      <Container>
-        <Row>
-          <Col md={5} sm={12}>
-            <form onSubmit={(e) => handleOnSubmit(e)}>
-              <div className="brand">
-                <img src={logo} alt="" />
-                <h1>
-                  Chat <span>App</span>
-                </h1>
+      <Container maxW="xl">
+        <form onSubmit={(e) => handleOnSubmit(e)}>
+          <div className="form-inputs">
+            <input
+              type="text"
+              placeholder="Email *"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              min="3"
+            />
+            <div className="passContainer">
+              <input
+                type={show ? "text" : "password"}
+                placeholder="Password *"
+                name="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+              <div className="showHidePass" onClick={() => setShow(!show)}>
+                {show ? <BiShow /> : <BiHide />}
               </div>
+            </div>
+          </div>
 
-              <div className="form-inputs">
-                <input
-                  type="text"
-                  placeholder="Email"
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                  min="3"
-                />
+          {error && <span>Something went wrong!</span>}
 
-                <input
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  onChange={(e) => setPassword(e.target.value)}
-                  value={password}
-                />
-              </div>
-
-              {error && <span>Something went wrong!</span>}
-
-              <button type="submit">
-                {loading ? (
-                  <Spinner
-                    animation="grow"
-                    variant="light"
-                    className="spinner"
-                  />
-                ) : (
-                  "Login"
-                )}
-              </button>
-              <span className="form-footer">
-                Don't have an account? <Link to="/register">Register</Link>
-              </span>
-            </form>
-          </Col>
-        </Row>
+          <button type="submit">
+            {loading ? (
+              <Spinner animation="grow" variant="light" className="spinner" />
+            ) : (
+              "Login"
+            )}
+          </button>
+          <span className="form-footer">
+            Don't have an account? <Link to="/register">Register</Link>
+          </span>
+        </form>
       </Container>
-    </FormContainer>
+    </LoginContainer>
   )
 }
 

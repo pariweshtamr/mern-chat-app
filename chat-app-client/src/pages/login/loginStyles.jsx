@@ -1,40 +1,18 @@
 import styled from "styled-components"
 
-export const FormContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
+export const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
-  background-color: #e6eaef;
-  .brand {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    justify-content: center;
-    img {
-      height: 5rem;
-    }
-    h1 {
-      color: #000;
-      text-transform: uppercase;
-      span {
-        color: #2679bc;
-        font-weight: 500;
-      }
-    }
-  }
   form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     background-color: #f6f6f6;
-    border-radius: 2rem;
-    padding: 3rem;
-
+    padding: 0.5rem;
+    margin: 0 auto;
     .form-inputs {
       display: flex;
       flex-direction: column;
@@ -43,7 +21,7 @@ export const FormContainer = styled.div`
         background: none;
         padding: 1rem;
         border: none;
-        border-bottom: 1px solid #2679bc;
+        border-bottom: 1px solid #84bae6;
         color: #000;
         width: 100%;
         font-size: 1rem;
@@ -53,6 +31,18 @@ export const FormContainer = styled.div`
         }
         &:focus {
           outline: none;
+        }
+      }
+
+      .passContainer {
+        position: relative;
+
+        .showHidePass {
+          position: absolute;
+          top: 0;
+          right: 1rem;
+          transform: translateY(130%);
+          cursor: pointer;
         }
       }
     }
@@ -71,6 +61,7 @@ export const FormContainer = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
+      margin-top: 1rem;
 
       &:hover {
         background: linear-gradient(90deg, #2cbdac, #2ec6a2, #31c9a2);

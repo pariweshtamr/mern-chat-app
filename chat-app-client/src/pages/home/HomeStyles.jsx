@@ -1,18 +1,32 @@
 import styled from "styled-components"
 
-export const HomeContainer = styled.div`
-  background: #e6eaef;
+export const HomeStyles = styled.div`
   height: 100vh;
+  width: 100vw;
+  background: url("/background.png");
+  background-size: cover;
+  background-position: center;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
 
-  .wrapper {
-    border: 1px solid #fff;
-    width: 100%;
-    height: 100%;
+  .brand {
     display: flex;
-    padding: 0;
-    overflow: hidden;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+    .logoImg {
+      height: 4.5rem;
+    }
+    .logoText {
+      color: #000;
+      font-weight: 500;
+      font-size: 2rem;
+      text-transform: uppercase;
+      span {
+        color: #2679bc;
+        font-weight: 500;
+      }
+    }
   }
 `
