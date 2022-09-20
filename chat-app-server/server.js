@@ -5,13 +5,22 @@ import express from "express"
 const app = express()
 
 import cors from "cors"
+import { chats } from "./data/data.js"
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8001
 
 // Connect mongoDB
 import mongoClient from "./config/db.js"
 
 mongoClient()
+
+app.get("/api/chat", (req, res) => {
+  res.send(chats)
+})
+app.get("/api/chat/:_id", (req, res) => {
+  const singleChat = chats.find((c) => c._id === req.params._id)
+  res.send(singleChat)
+})
 
 // Middlewares
 app.use(express.json())

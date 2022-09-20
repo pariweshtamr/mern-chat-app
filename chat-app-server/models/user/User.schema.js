@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const UserSchema = new Schema(
   {
-    username: {
+    displayName: {
       type: String,
       required: true,
       min: 3,
@@ -22,13 +22,10 @@ const UserSchema = new Schema(
       required: true,
       min: 8,
     },
-    isAvatarImageSet: {
-      type: Boolean,
-      default: false,
-    },
     avatarImage: {
       type: String,
-      default: "",
+      default:
+        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
   },
   { timestamps: true }

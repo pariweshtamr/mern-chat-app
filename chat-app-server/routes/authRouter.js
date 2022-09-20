@@ -1,7 +1,12 @@
 import express from "express"
 import { comparePassword, hashPassword } from "../helpers/bcrypt.helper.js"
-import { getUserByUsername, registerUser } from "../models/user/User.model.js"
+import {
+  findAUserByEmail,
+  getUserByUsername,
+  registerUser,
+} from "../models/user/User.model.js"
 import { createError } from "../utils/error.js"
+import { generateToken } from "../utils/generateToken.js"
 
 const authRouter = express.Router()
 
@@ -11,24 +16,33 @@ authRouter.all("/", (req, res, next) => {
 
 //Register user
 authRouter.post("/register", async (req, res, next) => {
+  const { email } = req.body
   try {
-    //encrypt password coming from client
-    const hashPass = hashPassword(req.body.password)
+    const userExists = await findAUserByEmail(email)
+    if (userExists) {
+      res.status(400).json({ message: "User already exists" })
+    }
 
-    if (hashPass) {
-      req.body.password = hashPass
-      const user = await registerUser(req.body)
+    if (!userExists) {
+      //encrypt password coming from client
+      const hashPass = hashPassword(req.body.password)
 
-      return res.status(200).json({
-        status: "success",
-        message: "New user has been registered successfully.",
-        user,
+      if (hashPass) {
+        req.body.password = hashPass
+        const user = await registerUser(req.body)
+
+        return res.status(200).json({
+          status: "success",
+          message: "New user has been registered successfully.",
+          user,
+          token: await generateToken(user._id),
+        })
+      }
+      res.status(500).json({
+        status: "error",
+        message: "Unable to create new user. Please try again later.",
       })
     }
-    res.status(500).json({
-      status: "error",
-      message: "Unable to create new user. Please try again later.",
-    })
   } catch (error) {
     next(error)
   }
@@ -37,9 +51,9 @@ authRouter.post("/register", async (req, res, next) => {
 //login User
 authRouter.post("/login", async function (req, res, next) {
   try {
-    const { username, password } = req.body
+    const { email, password } = req.body
 
-    const user = await getUserByUsername(username)
+    const user = await findAUserByEmail(email)
     if (user._id) {
       //compare password
       const comparePass = comparePassword(password, user.password)
@@ -50,6 +64,7 @@ authRouter.post("/login", async function (req, res, next) {
           status: "success",
           message: "Login successful",
           user,
+          token: await generateToken(user._id),
         })
       } else {
         next(createError(400, "Wrong username or password!"))

@@ -39,3 +39,13 @@ export const getByIdAndUpdate = (_id, update) => {
     console.log(error)
   }
 }
+
+// Find user
+export const findAUserByEmail = (email) => {
+  try {
+    const user = User.findOne({ email })
+    return user
+  } catch (error) {
+    console.log(error)
+  }
+}
