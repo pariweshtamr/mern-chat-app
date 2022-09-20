@@ -1,29 +1,16 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom"
-import { useContext } from "react"
-import { AuthContext } from "./context/AuthContext"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Chat from "./pages/Chat/Chat"
-import Login from "./pages/login/Login"
 import Home from "./pages/home/Home"
+import { useSelector } from "react-redux"
 
 function App() {
-  const { currentUser } = useContext(AuthContext)
-
-  const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />
-    }
-    return children
-  }
+  const { user } = useSelector((state) => state.user)
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={currentUser ? <Home /> : <Chat />}></Route>
+        <Route path="/chats" element={<Chat />}></Route>
+        <Route path="/" element={user ? <Home /> : <Chat />}></Route>
       </Routes>
     </Router>
   )

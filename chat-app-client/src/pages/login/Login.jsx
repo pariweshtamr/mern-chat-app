@@ -1,39 +1,44 @@
 import React, { useState } from "react"
-import { Spinner } from "react-bootstrap"
-import { Container } from "@chakra-ui/react"
+import { Container, useToast, Spinner } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
 import { LoginContainer } from "./LoginStyles"
-import { ToastContainer, toast } from "react-toastify"
+import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { BiShow, BiHide } from "react-icons/bi"
+import { loginUser } from "../../api/authApi"
+import { useDispatch } from "react-redux"
+import { userLogin } from "../../redux/User/UserAction"
 
 const Login = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const toast = useToast()
   const [show, setShow] = useState(false)
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("testPassword.7")
 
-  const toastOptions = {
-    position: "top-left",
-    autoClose: 4000,
-    pauseOnHover: true,
-    draggable: true,
-  }
-
   const handleOnSubmit = async (e) => {
     e.preventDefault()
     if (email === "" || password === "") {
-      toast.error("Please enter all the required fields.", toastOptions)
+      toast({
+        status: "error",
+        description: "Please enter your email and password.",
+      })
       return
     }
     try {
       setLoading(true)
+      dispatch(userLogin({ email, password })) && navigate("/chats")
       setLoading(false)
-      navigate("/")
     } catch (error) {
       setError(true)
+      toast({
+        title: "Error",
+        description: error.reponse.data.message,
+        status: "error",
+      })
       setLoading(false)
     }
   }
@@ -46,7 +51,7 @@ const Login = () => {
           <div className="form-inputs">
             <input
               type="text"
-              placeholder="Email *"
+              placeholder="Enter Your Email *"
               name="email"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
@@ -55,7 +60,7 @@ const Login = () => {
             <div className="passContainer">
               <input
                 type={show ? "text" : "password"}
-                placeholder="Password *"
+                placeholder="Enter Your Password *"
                 name="password"
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
@@ -68,13 +73,7 @@ const Login = () => {
 
           {error && <span>Something went wrong!</span>}
 
-          <button type="submit">
-            {loading ? (
-              <Spinner animation="grow" variant="light" className="spinner" />
-            ) : (
-              "Login"
-            )}
-          </button>
+          <button type="submit">{loading ? <Spinner /> : "Login"}</button>
           <span className="form-footer">
             Don't have an account? <Link to="/register">Register</Link>
           </span>

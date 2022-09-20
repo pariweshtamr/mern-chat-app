@@ -24,7 +24,7 @@ const Home = () => {
           p="3"
           bg="#f6f6f6"
           w="100%"
-          m="170px auto 15px auto"
+          m="150px auto 15px auto"
           borderRadius="lg"
         >
           <div className="brand">
