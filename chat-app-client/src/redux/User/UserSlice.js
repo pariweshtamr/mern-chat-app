@@ -15,6 +15,14 @@ const userSlice = createSlice({
     requestPending: (state) => {
       state.isLoading = true
     },
+    registerSuccess: (state, { payload }) => {
+      state.user = payload || {}
+      state.isLoggedIn = true
+      state.isLoading = false
+      state.error = null
+
+      localStorage.setItem("user", JSON.stringify(payload))
+    },
     loginSuccess: (state, { payload }) => {
       state.user = payload || {}
       state.isLoggedIn = true
@@ -49,6 +57,7 @@ const { reducer, actions } = userSlice
 
 export const {
   requestPending,
+  registerSuccess,
   loginSuccess,
   logoutSuccess,
   loginFail,

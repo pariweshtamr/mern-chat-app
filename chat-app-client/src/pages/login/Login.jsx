@@ -5,7 +5,6 @@ import { LoginContainer } from "./LoginStyles"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { BiShow, BiHide } from "react-icons/bi"
-import { loginUser } from "../../api/authApi"
 import { useDispatch } from "react-redux"
 import { userLogin } from "../../redux/User/UserAction"
 
