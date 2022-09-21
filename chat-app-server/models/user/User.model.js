@@ -11,10 +11,10 @@ export const registerUser = (newUser) => {
 }
 
 // Get all users
-export const getAllUsers = (filter) => {
+export const getAllUsersExceptLoggedInUser = (filter, _id) => {
   try {
-    const user = User.find(filter)
-    return user
+    const users = User.find(filter).find({ _id: { $ne: _id } })
+    return users
   } catch (error) {
     console.log(error)
   }
@@ -44,6 +44,15 @@ export const getByIdAndUpdate = (_id, update) => {
 export const findAUserByEmail = (email) => {
   try {
     const user = User.findOne({ email })
+    return user
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const getUserById = (_id) => {
+  try {
+    const user = User.findById(_id)
     return user
   } catch (error) {
     console.log(error)
