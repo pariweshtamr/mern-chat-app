@@ -7,7 +7,7 @@ import {
   findCreatedChat,
   findCreatedGroupChat,
   getChat,
-  renameGroupChat,
+  updateGroupChat,
 } from "../models/chat/Chat.model.js"
 import { populateSenderInfo } from "../models/message/Message.model.js"
 
@@ -124,11 +124,11 @@ chatRouter.post("/group", protect, async (req, res, next) => {
   }
 })
 
-// edit group chat (rename)
+// rename group chat
 chatRouter.put("/group", protect, async (req, res, next) => {
   const { chatId, chatName } = req.body
   try {
-    const updatedChat = await renameGroupChat(chatId, {
+    const updatedChat = await updateGroupChat(chatId, {
       chatName,
     })
       .populate("users", "-password")
@@ -138,6 +138,47 @@ chatRouter.put("/group", protect, async (req, res, next) => {
       res.status(400).json({ message: "Chat not found!" })
     } else {
       res.status(500).json(updatedChat)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+// add user to group
+chatRouter.put("/group/add", protect, async (req, res, next) => {
+  const { chatId, userId } = req.body
+  try {
+    const added = await updateGroupChat(chatId, {
+      $push: { users: userId },
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+
+    if (!added) {
+      res.status(400).json({ message: "Chat not found!" })
+    } else {
+      res.status(500).json(added)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
+
+// remove user to group
+chatRouter.put("/group/remove", protect, async (req, res, next) => {
+  const { chatId, userId } = req.body
+
+  try {
+    const removed = await updateGroupChat(chatId, {
+      $pull: { users: userId },
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+
+    if (!removed) {
+      res.status(400).json({ message: "Chat not found!" })
+    } else {
+      res.status(500).json(removed)
     }
   } catch (error) {
     next(error)

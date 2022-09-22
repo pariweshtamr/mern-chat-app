@@ -54,7 +54,7 @@ export const findAllUserChats = (filter) => {
   }
 }
 
-export const renameGroupChat = (_id, update) => {
+export const updateGroupChat = (_id, update) => {
   try {
     const chat = Chat.findByIdAndUpdate(_id, update, { new: true })
     return chat
