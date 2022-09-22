@@ -12,7 +12,6 @@ userRouter.get("/", protect, async (req, res, next) => {
   // $options: 'i' (case insensitivity to match upper and lower cases)
   try {
     //req.user value coming from protect middleware
-
     const keyword = req.query.search
       ? {
           $or: [

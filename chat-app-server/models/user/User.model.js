@@ -58,3 +58,12 @@ export const getUserById = (_id) => {
     console.log(error)
   }
 }
+
+// Populate sender user info to message model
+export const populateSenderInfo = (filter) => {
+  try {
+    const sender = User.populate(filter)
+  } catch (error) {
+    console.log(error)
+  }
+}
