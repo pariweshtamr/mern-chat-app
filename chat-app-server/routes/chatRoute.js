@@ -2,8 +2,12 @@ import express from "express"
 import { protect } from "../middlewares/auth.middleware.js"
 import {
   createChat,
+  createGroupChat,
+  findAllUserChats,
   findCreatedChat,
+  findCreatedGroupChat,
   getChat,
+  renameGroupChat,
 } from "../models/chat/Chat.model.js"
 import { populateSenderInfo } from "../models/message/Message.model.js"
 
@@ -63,8 +67,81 @@ chatRouter.post("/", protect, async (req, res, next) => {
   }
 })
 
-chatRouter.get("/", protect, async (req, res, next) => {})
-chatRouter.post("/group", protect, async (req, res, next) => {})
-chatRouter.put("/group", protect, async (req, res, next) => {})
+//fetch chats
+chatRouter.get("/", protect, async (req, res, next) => {
+  try {
+    // check which user is logged in
+    const userChats = await findAllUserChats({
+      users: { $elemMatch: { $eq: req.user._id } },
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+      .populate("latestMessage")
+      .sort({ updatedAt: -1 })
+      .then(async (results) => {
+        results = await populateSenderInfo(results, {
+          path: "latestMessage.sender",
+          select: "displayName email avatarImage",
+        })
+        res.status(200).json(results)
+      })
+  } catch (error) {
+    next(error)
+  }
+})
+
+// create group chat
+chatRouter.post("/group", protect, async (req, res, next) => {
+  const { users, chatName } = req.body
+  if (!users || !chatName) {
+    return res.status(400).json({ message: "Please fill all the fields" })
+  }
+
+  if (users.length < 2) {
+    res.status(400).json({
+      message: "More than 2 users are rquired to form a group chat!",
+    })
+  }
+  // users + current logged in user
+  users.push(req.user)
+  try {
+    const groupChat = await createGroupChat({
+      chatName,
+      users,
+      isGroupChat: true,
+      groupAdmin: req.user,
+    })
+
+    const fullGroupChatInfo = await findCreatedGroupChat({
+      _id: groupChat._id,
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+
+    res.status(200).json(fullGroupChatInfo)
+  } catch (error) {
+    next(error)
+  }
+})
+
+// edit group chat (rename)
+chatRouter.put("/group", protect, async (req, res, next) => {
+  const { chatId, chatName } = req.body
+  try {
+    const updatedChat = await renameGroupChat(chatId, {
+      chatName,
+    })
+      .populate("users", "-password")
+      .populate("groupAdmin", "-password")
+
+    if (!updatedChat) {
+      res.status(400).json({ message: "Chat not found!" })
+    } else {
+      res.status(500).json(updatedChat)
+    }
+  } catch (error) {
+    next(error)
+  }
+})
 
 export default chatRouter
