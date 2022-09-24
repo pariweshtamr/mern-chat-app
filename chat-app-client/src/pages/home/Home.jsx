@@ -7,7 +7,6 @@ import {
   TabPanel,
   Container,
   Box,
-  Text,
 } from "@chakra-ui/react"
 import Login from "../login/Login"
 import Register from "../register/Register"
@@ -18,14 +17,11 @@ const Home = () => {
     <HomeStyles>
       <Container maxW="xl" centerContent>
         <Box
-          d="flex"
-          justifyContent="center"
-          alignItems="center"
-          p="3"
           bg="#f6f6f6"
           w="100%"
-          m="150px auto 15px auto"
+          p={4}
           borderRadius="lg"
+          m="70px auto 15px auto"
         >
           <div className="brand">
             <img className="logoImg" src={logo} alt="logo" />
@@ -33,8 +29,6 @@ const Home = () => {
               Chat <span>App</span>
             </h1>
           </div>
-        </Box>
-        <Box bg="#f6f6f6" w="100%" p={4} borderRadius="lg">
           <Tabs variant="soft-rounded">
             <TabList>
               <Tab width="50%">Login</Tab>

@@ -15,6 +15,7 @@ export const HomeStyles = styled.div`
     align-items: center;
     gap: 0.5rem;
     justify-content: center;
+    margin-bottom: 1.5rem;
     .logoImg {
       height: 4.5rem;
     }

@@ -1,21 +1,20 @@
 import { createContext, useEffect, useState } from "react"
-import { onAuthStateChanged } from "firebase/auth"
-import { auth } from "../firebase"
+import { useNavigate } from "react-router-dom"
 
 export const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
+  const navigate = useNavigate()
   const [currentUser, setCurrentUser] = useState({})
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user)
-    })
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    setCurrentUser(userInfo)
 
-    return () => {
-      unsub()
+    if (!userInfo) {
+      navigate("/")
     }
-  }, [])
+  }, [navigate])
 
   return (
     <AuthContext.Provider value={{ currentUser }}>
