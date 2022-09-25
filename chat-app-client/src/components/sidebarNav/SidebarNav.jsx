@@ -1,22 +1,26 @@
 import { Navbar } from "./SidebarNavStyles"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons"
 import {
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
   Button,
   Avatar,
 } from "@chakra-ui/react"
 import ProfileModal from "../ProfileModal/ProfileModal"
+import { userLogout } from "../../redux/User/UserAction"
 
 const SidebarNav = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { user } = useSelector((state) => state.user)
+
+  const logoutHandler = () => {
+    dispatch(userLogout()) && navigate("/")
+  }
 
   return (
     <Navbar>
@@ -40,7 +44,7 @@ const SidebarNav = () => {
             <ProfileModal user={user}>
               <MenuItem>My Profile</MenuItem>
             </ProfileModal>
-            <MenuItem>Logout</MenuItem>
+            <MenuItem onClick={logoutHandler}>Logout</MenuItem>
           </MenuList>
         </Menu>
       </div>

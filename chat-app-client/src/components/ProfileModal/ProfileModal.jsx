@@ -1,4 +1,4 @@
-import { useDisclosure } from "@chakra-ui/react"
+import { Image, Text, useDisclosure } from "@chakra-ui/react"
 import {
   Modal,
   ModalOverlay,
@@ -14,20 +14,33 @@ const ProfileModal = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <div>
-      {children}
+      <span onClick={onOpen}>{children}</span>
 
       <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+        <ModalContent h="410px">
+          <ModalHeader fontSize="40px" m="0 auto">
+            {user.displayName}
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Hello I am {user.displayName}</ModalBody>
+          <ModalBody m="0 auto">
+            <Image
+              borderRadius="full"
+              boxSize="150px"
+              src={user.avatarImage}
+              alt={user.displayName}
+              m="0 auto 10px auto"
+            ></Image>
+
+            <Text fontSize={{ base: "24px", md: "26px" }}>
+              <b>Email:</b> {user.email}
+            </Text>
+          </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
+            <Button mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
