@@ -1,33 +1,6 @@
 import styled from "styled-components"
 
-export const SearchBarContainer = styled.div`
-  border-bottom: 1px solid #f4f5f4;
-
-  .searchForm {
-    padding: 10px;
-    position: relative;
-    svg {
-      position: absolute;
-      top: 50%;
-      left: 10%;
-      color: gray;
-      transform: translateY(-50%);
-    }
-    input {
-      background: #f4f5f4;
-      width: 100%;
-      border-radius: 50px;
-      padding: 5px 45px;
-      border: none;
-      color: #000;
-      outline: none;
-
-      &::placeholder {
-        color: gray;
-      }
-    }
-  }
-
+export const ChatsContainer = styled.div`
   .userChat {
     padding: 10px;
     margin: 0 5px;

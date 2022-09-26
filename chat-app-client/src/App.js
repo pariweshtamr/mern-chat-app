@@ -3,19 +3,27 @@ import Chat from "./pages/Chat/Chat"
 import Home from "./pages/home/Home"
 import { useEffect } from "react"
 import { useState } from "react"
+import { useSelector } from "react-redux"
 
 function App() {
-  const [user, setUser] = useState()
+  const { userInfo } = useSelector((state) => state.user)
+  const [loggedInUser, setLoggedInUser] = useState()
+
+  console.log(userInfo)
   useEffect(() => {
-    const currentUser = JSON.parse(localStorage.getItem("user"))
-    setUser(currentUser)
+    if (userInfo) {
+      const currentUser = JSON.parse(localStorage.getItem("user"))
+      if (currentUser === userInfo) {
+        setLoggedInUser(currentUser)
+      }
+    }
   }, [])
 
   return (
     <Router>
       <Routes>
         <Route path="/chats" element={<Chat />}></Route>
-        <Route path="/" element={!user ? <Home /> : <Chat />}></Route>
+        <Route path="/" element={!loggedInUser ? <Home /> : <Chat />}></Route>
       </Routes>
     </Router>
   )

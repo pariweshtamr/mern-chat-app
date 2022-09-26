@@ -23,3 +23,18 @@ export const getAllUsers = async (_id) => {
     return error.response.data
   }
 }
+
+export const getSearchedUsers = async (obj) => {
+  const { value, token } = obj
+  try {
+    const { data } = await axios.get(
+      `http://localhost:8000/api/v1/user?search=${value}`,
+      {
+        headers: { Authorization: token },
+      }
+    )
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}

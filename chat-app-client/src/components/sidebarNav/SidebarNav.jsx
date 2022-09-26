@@ -16,7 +16,9 @@ import { userLogout } from "../../redux/User/UserAction"
 const SidebarNav = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { user } = useSelector((state) => state.user)
+  const { userInfo } = useSelector((state) => state.user)
+
+  const { user } = userInfo
 
   const logoutHandler = () => {
     dispatch(userLogout()) && navigate("/")

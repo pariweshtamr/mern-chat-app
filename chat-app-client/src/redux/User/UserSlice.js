@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || {},
+  userInfo: JSON.parse(localStorage.getItem("userInfo")) || {},
   isLoggedIn: false,
   isLoading: false,
   autoLoginLoading: false,
@@ -16,28 +16,28 @@ const userSlice = createSlice({
       state.isLoading = true
     },
     registerSuccess: (state, { payload }) => {
-      state.user = payload || {}
+      state.userInfo = payload || {}
       state.isLoggedIn = true
       state.isLoading = false
       state.error = null
 
-      localStorage.setItem("user", JSON.stringify(payload))
+      localStorage.setItem("userInfo", JSON.stringify(payload))
     },
     loginSuccess: (state, { payload }) => {
-      state.user = payload || {}
+      state.userInfo = payload || {}
       state.isLoggedIn = true
       state.isLoading = false
       state.error = null
 
-      localStorage.setItem("user", JSON.stringify(payload))
+      localStorage.setItem("userInfo", JSON.stringify(payload))
     },
     loginFail: (state, { payload }) => {
-      state.user = {}
+      state.userInfo = {}
       state.isLoading = false
       state.error = payload || {}
     },
     logoutSuccess: (state) => {
-      state.user = {}
+      state.userInfo = {}
       state.isLoading = false
       state.error = false
 

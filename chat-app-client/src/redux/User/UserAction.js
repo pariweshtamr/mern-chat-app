@@ -12,7 +12,7 @@ export const userRegister = (registerInfo) => async (dispatch) => {
   // call api to register
   const data = await registerUser(registerInfo)
   if (data?.status === "success") {
-    return dispatch(registerSuccess(data.user))
+    return dispatch(registerSuccess(data))
   }
 }
 
@@ -22,7 +22,7 @@ export const userLogin = (loginInfo) => async (dispatch) => {
   // call api to login
   const data = await loginUser(loginInfo)
   if (data?.status === "success") {
-    return dispatch(loginSuccess(data.user))
+    return dispatch(loginSuccess(data))
   }
 }
 
