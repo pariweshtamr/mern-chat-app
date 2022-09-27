@@ -8,8 +8,6 @@ import { useSelector } from "react-redux"
 function App() {
   const { userInfo } = useSelector((state) => state.user)
   const [loggedInUser, setLoggedInUser] = useState()
-
-  console.log(userInfo)
   useEffect(() => {
     if (userInfo) {
       const currentUser = JSON.parse(localStorage.getItem("user"))

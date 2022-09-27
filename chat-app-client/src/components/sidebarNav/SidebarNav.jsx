@@ -18,8 +18,6 @@ const SidebarNav = () => {
   const navigate = useNavigate()
   const { userInfo } = useSelector((state) => state.user)
 
-  const { user } = userInfo
-
   const logoutHandler = () => {
     dispatch(userLogout()) && navigate("/")
   }
@@ -38,12 +36,12 @@ const SidebarNav = () => {
             <Avatar
               size="sm"
               cursor="pointer"
-              name={user.displayName}
-              src={user.avatarImage}
+              name={userInfo.user.displayName}
+              src={userInfo.user.avatarImage}
             />
           </MenuButton>
           <MenuList>
-            <ProfileModal user={user}>
+            <ProfileModal user={userInfo.user}>
               <MenuItem>My Profile</MenuItem>
             </ProfileModal>
             <MenuItem onClick={logoutHandler}>Logout</MenuItem>
