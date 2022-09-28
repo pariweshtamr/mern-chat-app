@@ -25,10 +25,10 @@ export const getAllUsers = async (_id) => {
 }
 
 export const getSearchedUsers = async (obj) => {
-  const { value, token } = obj
+  const { search, token } = obj
   try {
     const { data } = await axios.get(
-      `http://localhost:8000/api/v1/user?search=${value}`,
+      `http://localhost:8000/api/v1/user?search=${search}`,
       {
         headers: { Authorization: token },
       }

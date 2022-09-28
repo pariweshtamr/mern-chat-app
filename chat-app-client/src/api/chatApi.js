@@ -7,11 +7,11 @@ const rootUrl =
 const chatEp = rootUrl + "/chat"
 
 export const createChat = async (obj) => {
-  const { _id, userId, token } = obj
+  const { userId, token } = obj
   try {
     const { data } = await axios.post(
       chatEp,
-      { userId, _id },
+      { userId },
       {
         headers: {
           Authorization: token,
@@ -24,16 +24,13 @@ export const createChat = async (obj) => {
   }
 }
 
-export const fetchUserChats = async (info) => {
-  const { _id, token } = info
-
+export const fetchUserChats = async (token) => {
   try {
-    const { data } = await axios.get(chatEp, _id, {
+    const { data } = await axios.get(chatEp, {
       headers: {
         Authorization: token,
       },
     })
-    console.log(data)
     return data
   } catch (error) {
     return error.response.data

@@ -1,32 +1,24 @@
-import { useToast } from "@chakra-ui/react"
+import { Box, useToast } from "@chakra-ui/react"
 import React from "react"
 import { useEffect } from "react"
 import { useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
 import { fetchUserChats } from "../../api/chatApi"
+import { ChatState } from "../../context/ChatContext"
 import { getUserChats } from "../../redux/Chat/ChatAction"
-import SearchBar from "../searchBar/SearchBar"
-import SidebarNav from "../sidebarNav/SidebarNav"
+import { MyChatsStyles } from "./MyChatsStyles"
 
 const MyChats = () => {
-  const { userInfo } = useSelector((state) => state.user)
-  const { selectedChat, isLoading, chats } = useSelector((state) => state.chat)
+  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState()
+  const { token } = user
   const [loggedUser, setLoggedUser] = useState()
   const [currentChats, setCurrentChats] = useState()
   const toast = useToast()
-  const dispatch = useDispatch()
-  const { token } = userInfo
-  const { _id } = userInfo.user
 
   const fetchChats = async () => {
-    const getChats = async () => {
-      try {
-        dispatch(getUserChats({ _id, token }))
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    getChats()
+    try {
+      const data = await fetchUserChats(token)
+      setChats(data)
+    } catch (error) {}
   }
 
   useEffect(() => {
@@ -34,13 +26,18 @@ const MyChats = () => {
     fetchChats()
   }, [])
 
-  console.log(loggedUser)
-
   return (
-    <div>
-      <SidebarNav />
-      <SearchBar />
-    </div>
+    <MyChatsStyles>
+      <Box
+        display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
+        flexDirection="column"
+        p={3}
+        bg="black"
+        w={{ base: "100%", md: "31%" }}
+        borderRadius="lg"
+        borderWidth="1px"
+      ></Box>
+    </MyChatsStyles>
   )
 }
 

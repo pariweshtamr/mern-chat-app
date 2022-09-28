@@ -5,11 +5,9 @@ import { LoginContainer } from "./LoginStyles"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { BiShow, BiHide } from "react-icons/bi"
-import { useDispatch } from "react-redux"
-import { userLogin } from "../../redux/User/UserAction"
+import { loginUser } from "../../api/authApi"
 
 const Login = () => {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
   const toast = useToast()
   const [show, setShow] = useState(false)
@@ -20,6 +18,7 @@ const Login = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
     if (email === "" || password === "") {
       toast({
         status: "error",
@@ -28,9 +27,12 @@ const Login = () => {
       return
     }
     try {
-      setLoading(true)
-      dispatch(userLogin({ email, password })) && navigate("/chats")
+      const login = await loginUser({ email, password })
+      if (login.status === "success") {
+        localStorage.setItem("userInfo", JSON.stringify(login))
+      }
       setLoading(false)
+      navigate("/chats")
     } catch (error) {
       setError(true)
       toast({

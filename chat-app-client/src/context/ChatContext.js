@@ -1,17 +1,31 @@
-import { useReducer } from "react"
+import { useState } from "react"
+import { useEffect } from "react"
 import { createContext, useContext } from "react"
-import { AuthContext } from "./AuthContext"
+import { useNavigate } from "react-router-dom"
 
-export const ChatContext = createContext()
+const ChatContext = createContext()
 
-export const ChatContextProvider = ({ children }) => {
-  const { currentUser } = useContext(AuthContext)
+export const ChatProvider = ({ children }) => {
+  const [user, setUser] = useState()
+  const [selectedChat, setSelectedChat] = useState()
+  const navigate = useNavigate()
+  const [chats, setChats] = useState([])
 
-  const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE)
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    setUser(userInfo)
 
+    if (!userInfo) navigate("/")
+  }, [navigate])
   return (
-    <ChatContext.Provider value={{ data: state, dispatch }}>
+    <ChatContext.Provider
+      value={{ user, setUser, chats, setChats, selectedChat, setSelectedChat }}
+    >
       {children}
     </ChatContext.Provider>
   )
+}
+
+export const ChatState = () => {
+  return useContext(ChatContext)
 }

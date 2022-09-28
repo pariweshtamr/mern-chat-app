@@ -14,12 +14,10 @@ import ProfileModal from "../ProfileModal/ProfileModal"
 import { userLogout } from "../../redux/User/UserAction"
 
 const SidebarNav = () => {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { userInfo } = useSelector((state) => state.user)
 
   const logoutHandler = () => {
-    dispatch(userLogout()) && navigate("/")
+    // dispatch(userLogout()) && navigate("/")
   }
 
   return (
@@ -33,15 +31,10 @@ const SidebarNav = () => {
         </Menu>
         <Menu>
           <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-            <Avatar
-              size="sm"
-              cursor="pointer"
-              name={userInfo.user.displayName}
-              src={userInfo.user.avatarImage}
-            />
+            <Avatar size="sm" cursor="pointer" name="" src="" />
           </MenuButton>
           <MenuList>
-            <ProfileModal user={userInfo.user}>
+            <ProfileModal>
               <MenuItem>My Profile</MenuItem>
             </ProfileModal>
             <MenuItem onClick={logoutHandler}>Logout</MenuItem>

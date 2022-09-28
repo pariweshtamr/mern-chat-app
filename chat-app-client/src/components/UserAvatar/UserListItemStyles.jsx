@@ -1,7 +1,8 @@
 import styled from "styled-components"
 
-export const ChatsContainer = styled.div`
-  .userChat {
+export const UserListItemStyles = styled.div`
+
+.userChat {
     padding: 10px;
     margin: 0 5px;
     display: flex;
@@ -11,7 +12,7 @@ export const ChatsContainer = styled.div`
     cursor: pointer;
 
     &:hover {
-      background-color: #f4f5f4;
+      background-color: #edf2f6;
       border-radius: 10px;
       margin: 0 5pxpx;
     }
@@ -31,5 +32,4 @@ export const ChatsContainer = styled.div`
         color: gray;
       }
     }
-  }
 `

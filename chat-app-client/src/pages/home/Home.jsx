@@ -11,8 +11,22 @@ import {
 import Login from "../login/Login"
 import Register from "../register/Register"
 import logo from "../../assets/logo.png"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useEffect } from "react"
 
 const Home = () => {
+  const navigate = useNavigate()
+  const [user, setUser] = useState({})
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    setUser(userInfo)
+
+    if (userInfo) {
+      navigate("/chats")
+    }
+  }, [navigate])
   return (
     <HomeStyles>
       <Container maxW="xl" centerContent>

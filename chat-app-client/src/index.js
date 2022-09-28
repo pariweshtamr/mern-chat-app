@@ -3,17 +3,19 @@ import ReactDOM from "react-dom/client"
 import "./index.css"
 import "bootstrap/dist/css/bootstrap.min.css"
 import App from "./App"
-import { Provider } from "react-redux"
 import { ChakraProvider } from "@chakra-ui/react"
-import store from "./Store"
+import { ChatProvider } from "./context/ChatContext"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <ChakraProvider>
-        <App />
-      </ChakraProvider>
-    </Provider>
+    <ChakraProvider>
+      <Router>
+        <ChatProvider>
+          <App />
+        </ChatProvider>
+      </Router>
+    </ChakraProvider>
   </React.StrictMode>
 )

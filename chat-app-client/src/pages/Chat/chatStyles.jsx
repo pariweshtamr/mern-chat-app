@@ -5,10 +5,9 @@ export const ChatStyles = styled.div`
   width: 100%;
 
   .chatContainer {
-    width: 100%;
-    height: 100%;
     display: flex;
+    justify-content: space-between;
+    width: 100%;
     padding: 20px;
-    overflow: hidden;
   }
 `

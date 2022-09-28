@@ -19,17 +19,21 @@ const ProfileModal = ({ user, children }) => {
       <Modal size="lg" isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent h="410px">
-          <ModalHeader fontSize="40px" m="0 auto">
+          <ModalHeader fontSize="40px" display="flex" justifyContent="center">
             {user.displayName}
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody m="0 auto">
+          <ModalBody
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap="5"
+          >
             <Image
               borderRadius="full"
               boxSize="150px"
               src={user.avatarImage}
               alt={user.displayName}
-              m="0 auto 10px auto"
             ></Image>
 
             <Text fontSize={{ base: "24px", md: "26px" }}>

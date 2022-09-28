@@ -7,11 +7,8 @@ import addImage from "../../assets/addAvatar.png"
 import { BiShow, BiHide } from "react-icons/bi"
 import axios from "axios"
 import { registerUser } from "../../api/authApi"
-import { useDispatch } from "react-redux"
-import { userRegister } from "../../redux/User/UserAction"
 
 const Register = () => {
-  const dispatch = useDispatch()
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
   const [show, setShow] = useState(false)
@@ -82,11 +79,20 @@ const Register = () => {
 
     try {
       setLoading(true)
-      dispatch(userRegister({ displayName, password, email, file })) &&
+      const register = await registerUser({
+        displayName,
+        password,
+        email,
+        file,
+      })
+
+      register.status === "success" &&
         toast({
-          title: "New user has been registered successfully",
+          title: register.message,
           status: "success",
         })
+
+      localStorage.setItem("userInfo", JSON.stringify(register))
 
       setLoading(false)
       setDisplayName("")

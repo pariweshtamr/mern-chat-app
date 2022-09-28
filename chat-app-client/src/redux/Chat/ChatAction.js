@@ -11,12 +11,11 @@ export const createOneToOneChat = (chatInfo) => async (dispatch) => {
   }
 }
 
-export const getUserChats = (info) => async (dispatch) => {
+export const getUserChats = (token) => async (dispatch) => {
   dispatch(requestPending())
 
   //call api to get user chats
-  const data = await fetchUserChats(info)
-  console.log(data)
+  const data = await fetchUserChats(token)
   if (data) {
     return dispatch(getChatsSuccess(data))
   }

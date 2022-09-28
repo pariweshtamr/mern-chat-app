@@ -28,7 +28,7 @@ const chatSlice = createSlice({
       state.chats = payload
       state.isLoading = false
     },
-    getChatsSuccess: (state, { payload = [] }) => {
+    getChatsSuccess: (state, { payload }) => {
       const chats = { ...payload }
       state.isLoading = false
       state.chats.push(chats)
