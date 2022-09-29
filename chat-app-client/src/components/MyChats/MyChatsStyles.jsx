@@ -1,3 +1,6 @@
 import styled from "styled-components"
 
-export const MyChatsStyles = styled.div``
+export const MyChatsStyles = styled.div`
+  width: 100%;
+  height: 100%;
+`

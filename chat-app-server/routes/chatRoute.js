@@ -1,4 +1,4 @@
-import express from "express"
+import express, { request } from "express"
 import { protect } from "../middlewares/auth.middleware.js"
 import {
   createChat,
@@ -78,13 +78,15 @@ chatRouter.get("/", protect, async (req, res, next) => {
       .populate("groupAdmin", "-password")
       .populate("latestMessage")
       .sort({ updatedAt: -1 })
-      .then(async (results) => {
-        results = await populateSenderInfo(results, {
-          path: "latestMessage.sender",
-          select: "displayName email avatarImage",
-        })
-        res.status(200).json(results)
-      })
+
+    res.status(200).json(userChats)
+    // .then(async (results) => {
+    //   results = await populateSenderInfo(results, {
+    //     path: "latestMessage.sender",
+    //     select: "displayName email avatarImage",
+    //   })
+    //   res.status(200).json(results)
+    // })
   } catch (error) {
     next(error)
   }

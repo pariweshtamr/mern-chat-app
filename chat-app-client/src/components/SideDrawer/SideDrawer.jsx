@@ -16,12 +16,9 @@ import {
   DrawerBody,
   Input,
   useToast,
-  Stack,
-  Skeleton,
   Spinner,
 } from "@chakra-ui/react"
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons"
-
 import { BsSearch } from "react-icons/bs"
 import { useState } from "react"
 import ProfileModal from "../ProfileModal/ProfileModal"
@@ -31,6 +28,7 @@ import { SideDrawerStyles } from "./SideDrawerStyles"
 import { getSearchedUsers } from "../../api/userApi"
 import UserListItem from "../UserAvatar/UserListItem"
 import { createChat } from "../../api/chatApi"
+import ChatLoading from "../ChatLoading/ChatLoading"
 
 const SideDrawer = () => {
   const { user, setSelectedChat, chats, setChats } = ChatState()
@@ -151,24 +149,7 @@ const SideDrawer = () => {
               <Button onClick={handleSearch}>Go</Button>
             </Box>
             {loading ? (
-              <Stack>
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-                <Skeleton height="45px" />
-              </Stack>
+              <ChatLoading />
             ) : (
               searchResult?.map((u) => (
                 <UserListItem
