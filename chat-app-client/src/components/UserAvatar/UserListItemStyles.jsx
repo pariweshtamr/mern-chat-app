@@ -1,6 +1,7 @@
 import styled from "styled-components"
 
 export const UserListItemStyles = styled.div`
+width: 100%;
 
 .userChat {
     padding: 10px;
@@ -9,12 +10,13 @@ export const UserListItemStyles = styled.div`
     align-items: center;
     gap: 10px;
     color: #000;
+    width: 100%;
     cursor: pointer;
 
     &:hover {
       background-color: #edf2f6;
       border-radius: 10px;
-      margin: 0 5pxpx;
+      margin: 0 5px;
     }
     img {
       width: 50px;

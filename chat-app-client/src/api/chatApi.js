@@ -36,3 +36,29 @@ export const fetchUserChats = async (token) => {
     return error.response.data
   }
 }
+
+export const createGroupChat = async (obj, token) => {
+  try {
+    const { data } = await axios.post(chatEp + "/group", obj, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}
+
+export const renameGroupChat = async (obj, token) => {
+  try {
+    const { data } = await axios.put(chatEp + "/group", obj, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}

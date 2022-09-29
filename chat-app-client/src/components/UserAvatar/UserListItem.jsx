@@ -3,7 +3,6 @@ import { ChatState } from "../../context/ChatContext"
 import { UserListItemStyles } from "./UserListItemStyles"
 
 const UserListItem = ({ foreignUser, handleFunction }) => {
-  const { user } = ChatState()
   return (
     <UserListItemStyles>
       <div className="userChat" onClick={handleFunction}>

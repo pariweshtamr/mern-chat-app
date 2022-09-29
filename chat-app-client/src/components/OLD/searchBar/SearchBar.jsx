@@ -2,10 +2,10 @@ import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { SearchBarContainer } from "./SearchBarStyles"
 import { BsSearch } from "react-icons/bs"
-import { getSearchedUsers } from "../../api/userApi"
+import { getSearchedUsers } from "../../../api/userApi"
 import { Spinner } from "@chakra-ui/react"
-import { createChat } from "../../api/chatApi"
-import { createOneToOneChat } from "../../redux/Chat/ChatAction"
+import { createChat } from "../../../api/chatApi"
+import { createOneToOneChat } from "../../../redux/Chat/ChatAction"
 
 const SearchBar = () => {
   const { userInfo } = useSelector((state) => state.user)

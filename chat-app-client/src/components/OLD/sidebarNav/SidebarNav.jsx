@@ -10,8 +10,8 @@ import {
   Button,
   Avatar,
 } from "@chakra-ui/react"
-import ProfileModal from "../ProfileModal/ProfileModal"
-import { userLogout } from "../../redux/User/UserAction"
+import ProfileModal from "../../ProfileModal/ProfileModal"
+import { userLogout } from "../../../redux/User/UserAction"
 
 const SidebarNav = () => {
   const navigate = useNavigate()
