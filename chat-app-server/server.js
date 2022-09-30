@@ -31,11 +31,13 @@ app.use(cors())
 import authRouter from "./routes/authRouter.js"
 import userRouter from "./routes/userRoute.js"
 import chatRouter from "./routes/chatRoute.js"
+import messageRouter from "./routes/messageRoute.js"
 
 //Use routes
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/chat", chatRouter)
+app.use("/api/v1/message", messageRouter)
 
 app.use((error, req, res, next) => {
   const errorStatus = error.status || 500

@@ -62,3 +62,12 @@ export const updateGroupChat = (_id, update) => {
     console.log(error)
   }
 }
+
+export const updateLatestMessage = (chatId, updateMsg) => {
+  try {
+    const update = Chat.findByIdAndUpdate(chatId, updateMsg)
+    return update
+  } catch (error) {
+    console.log(error)
+  }
+}
