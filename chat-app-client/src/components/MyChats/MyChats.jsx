@@ -8,10 +8,10 @@ import { getSender } from "../../config/ChatLogic"
 import { ChatState } from "../../context/ChatContext"
 import ChatLoading from "../ChatLoading/ChatLoading"
 import GroupChatModal from "../GroupChatModal/GroupChatModal"
-import { MyChatsStyles } from "./MyChatsStyles"
 
-const MyChats = ({ fetchAgain }) => {
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState()
+const MyChats = () => {
+  const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } =
+    ChatState()
   const { token } = user
   const [loggedUser, setLoggedUser] = useState()
 

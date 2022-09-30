@@ -6,7 +6,7 @@ import { ChatState } from "../../context/ChatContext"
 import ProfileModal from "../ProfileModal/ProfileModal"
 import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+const SingleChat = () => {
   const { user, selectedChat, setSelectedChat } = ChatState()
   return (
     <>
@@ -35,10 +35,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             ) : (
               <>
                 {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal
-                  fetchAgain={fetchAgain}
-                  setFetchAgain={setFetchAgain}
-                />
+                <UpdateGroupChatModal />
               </>
             )}
           </Text>

@@ -7,14 +7,13 @@ import { ChatState } from "../../context/ChatContext"
 import SideDrawer from "../../components/SideDrawer/SideDrawer"
 
 const Chat = () => {
-  const [fetchAgain, setFetchAgain] = useState(false)
   const { user } = ChatState()
   return (
     <ChatStyles>
       {user && <SideDrawer />}
       <div className="chatContainer">
-        {user && <MyChats fetchAgain={fetchAgain} />}
-        <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+        {user && <MyChats />}
+        <ChatBox />
       </div>
     </ChatStyles>
   )

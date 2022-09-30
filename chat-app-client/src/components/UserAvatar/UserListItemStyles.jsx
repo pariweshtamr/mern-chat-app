@@ -2,6 +2,7 @@ import styled from "styled-components"
 
 export const UserListItemStyles = styled.div`
 width: 100%;
+margin-top: 10px;
 
 .userChat {
     padding: 10px;

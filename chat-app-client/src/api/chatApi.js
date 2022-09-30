@@ -62,3 +62,30 @@ export const renameGroupChat = async (obj, token) => {
     return error.response.data
   }
 }
+
+export const addUserToExistingGroup = async (obj, token) => {
+  try {
+    const { data } = await axios.put(chatEp + "/groupAdd", obj, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}
+
+export const removeUserFromExistingGroup = async (obj, token) => {
+  try {
+    const { data } = await axios.put(chatEp + "/groupRemove", obj, {
+      headers: {
+        Authorization: token,
+      },
+    })
+    console.log(data)
+    return data
+  } catch (error) {
+    return error.response.data
+  }
+}

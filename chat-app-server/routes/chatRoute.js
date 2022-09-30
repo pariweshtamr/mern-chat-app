@@ -147,7 +147,7 @@ chatRouter.put("/group", protect, async (req, res, next) => {
 })
 
 // add user to group
-chatRouter.put("/group/add", protect, async (req, res, next) => {
+chatRouter.put("/groupAdd", protect, async (req, res, next) => {
   const { chatId, userId } = req.body
   try {
     const added = await updateGroupChat(chatId, {
@@ -159,7 +159,7 @@ chatRouter.put("/group/add", protect, async (req, res, next) => {
     if (!added) {
       res.status(400).json({ message: "Chat not found!" })
     } else {
-      res.status(500).json(added)
+      res.status(200).json(added)
     }
   } catch (error) {
     next(error)
@@ -167,7 +167,7 @@ chatRouter.put("/group/add", protect, async (req, res, next) => {
 })
 
 // remove user to group
-chatRouter.put("/group/remove", protect, async (req, res, next) => {
+chatRouter.put("/groupRemove", protect, async (req, res, next) => {
   const { chatId, userId } = req.body
 
   try {
@@ -180,7 +180,7 @@ chatRouter.put("/group/remove", protect, async (req, res, next) => {
     if (!removed) {
       res.status(400).json({ message: "Chat not found!" })
     } else {
-      res.status(500).json(removed)
+      res.status(200).json(removed)
     }
   } catch (error) {
     next(error)

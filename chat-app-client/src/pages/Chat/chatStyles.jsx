@@ -7,7 +7,7 @@ export const ChatStyles = styled.div`
   .chatContainer {
     display: flex;
     width: 100%;
-    height: 91.5%;
+    height: 94.4%;
     padding: 20px;
   }
 `
