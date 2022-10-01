@@ -1,6 +1,17 @@
 import { ArrowBackIcon } from "@chakra-ui/icons"
-import { Box, IconButton, Text } from "@chakra-ui/react"
+import {
+  Box,
+  FormControl,
+  IconButton,
+  Input,
+  Spinner,
+  Text,
+  useToast,
+} from "@chakra-ui/react"
 import React from "react"
+import { useEffect } from "react"
+import { useState } from "react"
+import { fetchChatMessages, sendNewMessage } from "../../api/messageApi"
 import { getSender, getSenderFull } from "../../config/ChatLogic"
 import { ChatState } from "../../context/ChatContext"
 import ProfileModal from "../ProfileModal/ProfileModal"
@@ -8,6 +19,59 @@ import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
 
 const SingleChat = () => {
   const { user, selectedChat, setSelectedChat } = ChatState()
+  const [messages, setMessages] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [newMessage, setNewMessage] = useState()
+  const { token } = user
+  const toast = useToast()
+
+  const fetchMessages = async () => {
+    if (!selectedChat) return
+    try {
+      setLoading(true)
+      const data = await fetchChatMessages({ chatId: selectedChat._id }, token)
+      setMessages(data)
+      setLoading(false)
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to load Messages",
+        status: "error",
+        duration: 3000,
+        position: "bottom",
+      })
+    }
+  }
+
+  const sendMessage = async (e) => {
+    if (e.key === "Enter" && newMessage) {
+      try {
+        setNewMessage("")
+        const data = await sendNewMessage(
+          { chatId: selectedChat._id, message: newMessage },
+          token
+        )
+
+        setMessages([...messages, data])
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send message!",
+          status: "error",
+          duration: 3000,
+          position: "bottom",
+        })
+      }
+    }
+  }
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value)
+  }
+
+  useEffect(() => {
+    fetchMessages()
+  }, [selectedChat])
   return (
     <>
       {selectedChat ? (
@@ -44,13 +108,34 @@ const SingleChat = () => {
             flexDirection="column"
             justifyContent="flex-end"
             p={3}
-            bg="#e8e8e8"
+            bg="transparent"
             w="100%"
             h="100%"
             borderRadius="lg"
             overflowY="hidden"
           >
-            Messages here
+            {loading ? (
+              <Spinner
+                size="xl"
+                w={20}
+                h={20}
+                alignSelf="center"
+                margin="auto"
+              />
+            ) : (
+              <div>Messages</div>
+            )}
+            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              <Input
+                placeholder="Enter a message..."
+                variant="filled"
+                bg="transparent"
+                border="1px"
+                borderColor="#2679bc"
+                onChange={typingHandler}
+                value={newMessage}
+              />
+            </FormControl>
           </Box>
         </>
       ) : (
