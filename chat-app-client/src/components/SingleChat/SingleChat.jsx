@@ -1,3 +1,4 @@
+import { ChatState } from "../../context/ChatContext"
 import { ArrowBackIcon } from "@chakra-ui/icons"
 import {
   Box,
@@ -13,23 +14,23 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { fetchChatMessages, sendNewMessage } from "../../api/messageApi"
 import { getSender, getSenderFull } from "../../config/ChatLogic"
-import { ChatState } from "../../context/ChatContext"
 import ProfileModal from "../ProfileModal/ProfileModal"
+import ScrollableChat from "../ScrollableChat/ScrollableChat"
 import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
 
 const SingleChat = () => {
   const { user, selectedChat, setSelectedChat } = ChatState()
+  const [loggedUser, setLoggedUser] = useState()
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState()
-  const { token } = user
   const toast = useToast()
 
   const fetchMessages = async () => {
     if (!selectedChat) return
     try {
       setLoading(true)
-      const data = await fetchChatMessages({ chatId: selectedChat._id }, token)
+      const data = await fetchChatMessages(selectedChat._id, loggedUser.token)
       setMessages(data)
       setLoading(false)
     } catch (error) {
@@ -49,7 +50,7 @@ const SingleChat = () => {
         setNewMessage("")
         const data = await sendNewMessage(
           { chatId: selectedChat._id, message: newMessage },
-          token
+          loggedUser.token
         )
 
         setMessages([...messages, data])
@@ -70,6 +71,7 @@ const SingleChat = () => {
   }
 
   useEffect(() => {
+    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
     fetchMessages()
   }, [selectedChat])
   return (
@@ -99,7 +101,7 @@ const SingleChat = () => {
             ) : (
               <>
                 {selectedChat.chatName.toUpperCase()}
-                <UpdateGroupChatModal />
+                <UpdateGroupChatModal fetchMessages={fetchMessages} />
               </>
             )}
           </Text>
@@ -123,7 +125,9 @@ const SingleChat = () => {
                 margin="auto"
               />
             ) : (
-              <div>Messages</div>
+              <div className="messages">
+                <ScrollableChat messages={messages} />
+              </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
               <Input

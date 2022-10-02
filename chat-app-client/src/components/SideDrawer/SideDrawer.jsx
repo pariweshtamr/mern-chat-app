@@ -32,7 +32,6 @@ import ChatLoading from "../ChatLoading/ChatLoading"
 
 const SideDrawer = () => {
   const { user, setSelectedChat, chats, setChats } = ChatState()
-  const { _id } = user.user
   const { token } = user
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -119,6 +118,7 @@ const SideDrawer = () => {
         <Text fontSize="2xl">Chat-App</Text>
 
         <div>
+          <BellIcon mr={2} fontSize="20px" />
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               <Avatar size="sm" cursor="pointer" name="" src="" />
