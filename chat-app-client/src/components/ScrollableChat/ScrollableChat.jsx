@@ -42,6 +42,7 @@ const ScrollableChat = ({ messages }) => {
                 backgroundColor: `${
                   m.sender._id === user.user._id ? "#2679bc" : "#edf2f6"
                 }`,
+                color: `${m.sender._id === user.user._id ? "#fff" : "#000"}`,
                 borderRadius: "20px",
                 padding: "5px 15px",
                 maxWidth: "75%",
