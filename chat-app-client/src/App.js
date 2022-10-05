@@ -8,8 +8,8 @@ function App() {
   const { user } = useContext(AuthContext)
   return (
     <Routes>
-      <Route path="/chats" element={<Chat />}></Route>
-      <Route path="/" element={user ? <Home /> : <Chat />}></Route>
+      <Route path="/chats" element={user && <Chat />}></Route>
+      <Route path="/" element={<Home />}></Route>
     </Routes>
   )
 }

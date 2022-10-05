@@ -20,6 +20,8 @@ import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
 import { io } from "socket.io-client"
 import { useRef } from "react"
 import { AuthContext } from "../../context/AuthContext/AuthContext"
+import Lottie from "react-lottie"
+import animationData from "../../assets/typing.json"
 
 const ENDPOINT =
   process.env.NODE_ENV === "production"
@@ -33,8 +35,19 @@ const SingleChat = () => {
   const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState()
   const [socketConnected, setSocketConnected] = useState(false)
+  const [typing, setTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
   const toast = useToast()
   const socket = useRef()
+
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  }
 
   var selectedChatCompare
 
@@ -58,6 +71,7 @@ const SingleChat = () => {
   }
 
   const sendMessage = async (e) => {
+    socket.current?.emit("stop typing", selectedChat._id)
     if (e.key === "Enter" && newMessage) {
       try {
         setNewMessage("")
@@ -82,7 +96,9 @@ const SingleChat = () => {
   useEffect(() => {
     socket.current = io(ENDPOINT)
     socket.current?.emit("setup", user?.user)
-    socket.current?.on("connection", () => setSocketConnected(true))
+    socket.current?.on("connected", () => setSocketConnected(true))
+    socket.current?.on("typing", () => setIsTyping(true))
+    socket.current?.on("stop typing", () => setIsTyping(false))
   }, [])
 
   useEffect(() => {
@@ -105,6 +121,26 @@ const SingleChat = () => {
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value)
+
+    // typing indicator logic
+    if (!socketConnected) return
+
+    if (!typing) {
+      setTyping(true)
+      socket.current?.emit("typing", selectedChat._id)
+    }
+    let lastTypingTime = new Date().getTime()
+    var timerLength = 5000
+
+    setTimeout(() => {
+      const timeNow = new Date().getTime()
+      const timeDifference = timeNow - lastTypingTime
+
+      if (timeDifference >= timerLength && typing) {
+        socket.current?.emit("stop typing", selectedChat._id)
+        setTyping(false)
+      }
+    }, timerLength)
   }
 
   return (
@@ -163,6 +199,17 @@ const SingleChat = () => {
               </div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              {isTyping ? (
+                <div className="">
+                  <Lottie
+                    options={defaultOptions}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 placeholder="Enter a message..."
                 variant="filled"
