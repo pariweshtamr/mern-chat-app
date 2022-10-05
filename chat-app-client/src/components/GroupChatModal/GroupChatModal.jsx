@@ -15,9 +15,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { createGroupChat } from "../../api/chatApi"
 import { getSearchedUsers } from "../../api/userApi"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 import { ChatState } from "../../context/ChatContext"
 import UserBadgeItem from "../UserAvatar/UserBadgeItem"
 import UserListItem from "../UserAvatar/UserListItem"
@@ -29,7 +30,8 @@ const GroupChatModal = ({ children }) => {
   const [searchResult, setSearchResult] = useState([])
   const [loading, setLoading] = useState(false)
   const toast = useToast()
-  const { user, chats, setChats } = ChatState()
+  const { user } = useContext(AuthContext)
+  const { chats, setChats } = ChatState()
   const { token } = user
 
   const { isOpen, onOpen, onClose } = useDisclosure()

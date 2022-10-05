@@ -9,7 +9,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
 import { fetchChatMessages, sendNewMessage } from "../../api/messageApi"
@@ -19,6 +19,7 @@ import ScrollableChat from "../ScrollableChat/ScrollableChat"
 import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
 import { io } from "socket.io-client"
 import { useRef } from "react"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const ENDPOINT =
   process.env.NODE_ENV === "production"
@@ -26,25 +27,29 @@ const ENDPOINT =
     : "http://localhost:8000"
 
 const SingleChat = () => {
-  const { user, selectedChat, setSelectedChat } = ChatState()
-  const [loggedUser, setLoggedUser] = useState()
+  const { user } = useContext(AuthContext)
+  const { selectedChat, setSelectedChat } = ChatState()
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState()
+  const [socketConnected, setSocketConnected] = useState(false)
   const toast = useToast()
   const socket = useRef()
+
+  var selectedChatCompare
 
   const fetchMessages = async () => {
     if (!selectedChat) return
     try {
       setLoading(true)
-      const data = await fetchChatMessages(selectedChat._id, loggedUser.token)
+      const data = await fetchChatMessages(selectedChat._id, user?.token)
       setMessages(data)
       setLoading(false)
+      socket.current?.emit("join chat", selectedChat._id)
     } catch (error) {
       toast({
         title: "Error Occured!",
-        description: "Failed to load Messages",
+        description: error.message,
         status: "error",
         duration: 3000,
         position: "bottom",
@@ -58,9 +63,9 @@ const SingleChat = () => {
         setNewMessage("")
         const data = await sendNewMessage(
           { chatId: selectedChat._id, message: newMessage },
-          loggedUser.token
+          user.token
         )
-
+        socket.current?.emit("new message", data)
         setMessages([...messages, data])
       } catch (error) {
         toast({
@@ -74,18 +79,33 @@ const SingleChat = () => {
     }
   }
 
-  const typingHandler = (e) => {
-    setNewMessage(e.target.value)
-  }
+  useEffect(() => {
+    socket.current = io(ENDPOINT)
+    socket.current?.emit("setup", user?.user)
+    socket.current?.on("connection", () => setSocketConnected(true))
+  }, [])
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
     fetchMessages()
+    selectedChatCompare = selectedChat
   }, [selectedChat])
 
   useEffect(() => {
-    socket.current = io(ENDPOINT)
-  }, [])
+    socket.current?.on("message received", (newMessageReceived) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        //give notification
+      } else {
+        setMessages([...messages, newMessageReceived])
+      }
+    })
+  })
+
+  const typingHandler = (e) => {
+    setNewMessage(e.target.value)
+  }
 
   return (
     <>

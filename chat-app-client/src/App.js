@@ -1,12 +1,15 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { useContext } from "react"
+import { Routes, Route } from "react-router-dom"
+import { AuthContext } from "./context/AuthContext/AuthContext"
 import Chat from "./pages/Chat/Chat"
 import Home from "./pages/home/Home"
 
 function App() {
+  const { user } = useContext(AuthContext)
   return (
     <Routes>
       <Route path="/chats" element={<Chat />}></Route>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/" element={user ? <Home /> : <Chat />}></Route>
     </Routes>
   )
 }

@@ -5,14 +5,14 @@ import ChatBox from "../../components/ChatBox/ChatBox"
 
 import { ChatState } from "../../context/ChatContext"
 import SideDrawer from "../../components/SideDrawer/SideDrawer"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const Chat = () => {
-  const { user } = ChatState()
   return (
     <ChatStyles>
-      {user && <SideDrawer />}
+      <SideDrawer />
       <div className="chatContainer">
-        {user && <MyChats />}
+        <MyChats />
         <ChatBox />
       </div>
     </ChatStyles>

@@ -15,11 +15,12 @@ export const registerUser = async (newUser) => {
   }
 }
 
-export const loginUser = async (user) => {
+export const loginUser = async (userCredentials, dispatch) => {
+  dispatch({ type: "LOGIN_START" })
   try {
-    const { data } = await axios.post(authEp + "/login", user)
-    return data
-  } catch (error) {
-    return error.response.data
+    const { data } = await axios.post(authEp + "/login", userCredentials)
+    dispatch({ type: "LOGIN_SUCCESS", payload: data })
+  } catch (err) {
+    dispatch({ type: "LOGIN_FAILURE", payload: err })
   }
 }

@@ -1,16 +1,18 @@
 import { AddIcon } from "@chakra-ui/icons"
 import { Box, Button, Stack, Text } from "@chakra-ui/react"
-import React from "react"
+import React, { useContext } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
 import { fetchUserChats } from "../../api/chatApi"
 import { getSender } from "../../config/ChatLogic"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 import { ChatState } from "../../context/ChatContext"
 import ChatLoading from "../ChatLoading/ChatLoading"
 import GroupChatModal from "../GroupChatModal/GroupChatModal"
 
 const MyChats = () => {
-  const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } =
+  const { user } = useContext(AuthContext)
+  const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } =
     ChatState()
   const { token } = user
   const [loggedUser, setLoggedUser] = useState()

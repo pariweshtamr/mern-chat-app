@@ -100,8 +100,6 @@ const Register = () => {
       setConfirmPassword("")
       setEmail("")
       setFile("")
-
-      navigate("/chats")
     } catch (error) {
       setError(true)
       toast({

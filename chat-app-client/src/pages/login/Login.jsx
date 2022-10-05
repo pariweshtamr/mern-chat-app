@@ -6,19 +6,20 @@ import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import { BiShow, BiHide } from "react-icons/bi"
 import { loginUser } from "../../api/authApi"
+import { useContext } from "react"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const Login = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const [show, setShow] = useState(false)
   const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("testPassword.7")
+  const { isFetching, err, dispatch } = useContext(AuthContext)
 
   const handleOnSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
     if (email === "" || password === "") {
       toast({
         status: "error",
@@ -26,22 +27,8 @@ const Login = () => {
       })
       return
     }
-    try {
-      const login = await loginUser({ email, password })
-      if (login.status === "success") {
-        localStorage.setItem("userInfo", JSON.stringify(login))
-      }
-      setLoading(false)
-      navigate("/chats")
-    } catch (error) {
-      setError(true)
-      toast({
-        title: "Error",
-        description: error.reponse.data.message,
-        status: "error",
-      })
-      setLoading(false)
-    }
+
+    loginUser({ email, password }, dispatch)
   }
 
   return (
@@ -74,7 +61,7 @@ const Login = () => {
 
           {error && <span>Something went wrong!</span>}
 
-          <button type="submit">{loading ? <Spinner /> : "Login"}</button>
+          <button type="submit">{isFetching ? <Spinner /> : "Login"}</button>
           <span className="form-footer">
             Don't have an account? <Link to="/register">Register</Link>
           </span>

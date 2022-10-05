@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react"
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons"
 import { BsSearch } from "react-icons/bs"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import ProfileModal from "../ProfileModal/ProfileModal"
 import { ChatState } from "../../context/ChatContext"
 import { useNavigate } from "react-router-dom"
@@ -29,9 +29,11 @@ import { getSearchedUsers } from "../../api/userApi"
 import UserListItem from "../UserAvatar/UserListItem"
 import { createChat } from "../../api/chatApi"
 import ChatLoading from "../ChatLoading/ChatLoading"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const SideDrawer = () => {
-  const { user, setSelectedChat, chats, setChats } = ChatState()
+  const { user } = useContext(AuthContext)
+  const { setSelectedChat, chats, setChats } = ChatState()
   const { token } = user
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
