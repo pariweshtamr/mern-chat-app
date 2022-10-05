@@ -1,10 +1,11 @@
 import { Avatar, Tooltip } from "@chakra-ui/react"
+import { useContext } from "react"
 import ScrollableFeed from "react-scrollable-feed"
 import { isLastMessage, isSameSender } from "../../config/ChatLogic"
-import { ChatState } from "../../context/ChatContext"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const ScrollableChat = ({ messages }) => {
-  const { user } = ChatState()
+  const { user } = useContext(AuthContext)
   return (
     <ScrollableFeed>
       {messages &&
@@ -27,9 +28,9 @@ const ScrollableChat = ({ messages }) => {
               >
                 <Avatar
                   mt="7px"
-                  mr={1}
+                  mr="-32px"
                   size="sm"
-                  curso="pointer"
+                  cursor="pointer"
                   name={m.sender.displayName}
                   src={m.sender.avatarImage}
                 />
@@ -42,6 +43,7 @@ const ScrollableChat = ({ messages }) => {
                   m.sender._id === user.user._id ? "#2679bc" : "#edf2f6"
                 }`,
                 color: `${m.sender._id === user.user._id ? "#fff" : "#000"}`,
+                marginLeft: "38px",
                 borderRadius: "20px",
                 padding: "5px 15px",
                 maxWidth: "75%",

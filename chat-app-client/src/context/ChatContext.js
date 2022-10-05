@@ -6,30 +6,23 @@ import { useNavigate } from "react-router-dom"
 const ChatContext = createContext()
 
 export const ChatProvider = ({ children }) => {
-  const [user, setUser] = useState()
   const [selectedChat, setSelectedChat] = useState()
   const navigate = useNavigate()
   const [chats, setChats] = useState([])
   const [fetchAgain, setFetchAgain] = useState(false)
-
-  useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
-    setUser(userInfo)
-
-    if (!userInfo) navigate("/")
-  }, [navigate])
+  const [notification, setNotification] = useState([])
 
   return (
     <ChatContext.Provider
       value={{
-        user,
-        setUser,
         chats,
         setChats,
         selectedChat,
         setSelectedChat,
         fetchAgain,
         setFetchAgain,
+        notification,
+        setNotification,
       }}
     >
       {children}

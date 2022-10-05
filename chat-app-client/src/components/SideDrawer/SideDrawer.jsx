@@ -17,6 +17,7 @@ import {
   Input,
   useToast,
   Spinner,
+  effect,
 } from "@chakra-ui/react"
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons"
 import { BsSearch } from "react-icons/bs"
@@ -30,10 +31,13 @@ import UserListItem from "../UserAvatar/UserListItem"
 import { createChat } from "../../api/chatApi"
 import ChatLoading from "../ChatLoading/ChatLoading"
 import { AuthContext } from "../../context/AuthContext/AuthContext"
+import { getSender } from "../../config/ChatLogic"
+import NotificationBadge from "react-notification-badge"
 
 const SideDrawer = () => {
   const { user } = useContext(AuthContext)
-  const { setSelectedChat, chats, setChats } = ChatState()
+  const { setSelectedChat, chats, setChats, notification, setNotification } =
+    ChatState()
   const { token } = user
   const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -120,7 +124,31 @@ const SideDrawer = () => {
         <Text fontSize="2xl">Chat-App</Text>
 
         <div>
-          <BellIcon mr={2} fontSize="20px" />
+          <Menu>
+            <MenuButton p={1}>
+              <NotificationBadge
+                count={notification.length}
+                effect={effect.scale}
+              />
+              <BellIcon mr={2} fontSize="2xl" />
+            </MenuButton>
+            <MenuList px={2}>
+              {!notification.length && "No new messages"}
+              {notification.map((n) => (
+                <MenuItem
+                  key={n._id}
+                  onClick={() => {
+                    setSelectedChat(n.chat)
+                    setNotification(notification.filter((notif) => notif !== n))
+                  }}
+                >
+                  {n.chat.isGroupChat
+                    ? `New message in ${n.chat.chatName}`
+                    : `New message from ${getSender(user, n.chat.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
           <Menu>
             <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               <Avatar size="sm" cursor="pointer" name="" src="" />

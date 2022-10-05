@@ -30,7 +30,14 @@ const ENDPOINT =
 
 const SingleChat = () => {
   const { user } = useContext(AuthContext)
-  const { selectedChat, setSelectedChat } = ChatState()
+  const {
+    selectedChat,
+    setSelectedChat,
+    notification,
+    setNotification,
+    fetchAgain,
+    setFetchAgain,
+  } = ChatState()
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState()
@@ -113,6 +120,10 @@ const SingleChat = () => {
         selectedChatCompare._id !== newMessageReceived.chat._id
       ) {
         //give notification
+        if (!notification.includes(newMessageReceived)) {
+          setNotification([newMessageReceived, ...notification])
+          setFetchAgain(!fetchAgain)
+        }
       } else {
         setMessages([...messages, newMessageReceived])
       }
