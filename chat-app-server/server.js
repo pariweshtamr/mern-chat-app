@@ -5,6 +5,7 @@ import express from "express"
 const app = express()
 
 import cors from "cors"
+import { Server } from "socket.io"
 import { chats } from "./data/data.js"
 
 const PORT = process.env.PORT || 8001
@@ -50,9 +51,21 @@ app.use((error, req, res, next) => {
   })
 })
 
-app.listen(PORT, (error) => {
+const server = app.listen(PORT, (error) => {
   if (error) {
     return console.log(error)
   }
   console.log(`Backend server is running at ${PORT}`)
+})
+
+const io = new Server(server, {
+  pingTimeout: 60000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+})
+
+io.on("connection", (socket) => {
+  // when user is connected
+  console.log("a user is connected")
 })

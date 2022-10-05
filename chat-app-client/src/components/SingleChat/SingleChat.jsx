@@ -17,6 +17,13 @@ import { getSender, getSenderFull } from "../../config/ChatLogic"
 import ProfileModal from "../ProfileModal/ProfileModal"
 import ScrollableChat from "../ScrollableChat/ScrollableChat"
 import UpdateGroupChatModal from "../UpdateGroupChatModal/UpdateGroupChatModal"
+import { io } from "socket.io-client"
+import { useRef } from "react"
+
+const ENDPOINT =
+  process.env.NODE_ENV === "production"
+    ? process.env.REACT_APP_ENDPOINT_URL
+    : "http://localhost:8000"
 
 const SingleChat = () => {
   const { user, selectedChat, setSelectedChat } = ChatState()
@@ -25,6 +32,7 @@ const SingleChat = () => {
   const [loading, setLoading] = useState(false)
   const [newMessage, setNewMessage] = useState()
   const toast = useToast()
+  const socket = useRef()
 
   const fetchMessages = async () => {
     if (!selectedChat) return
@@ -74,6 +82,11 @@ const SingleChat = () => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")))
     fetchMessages()
   }, [selectedChat])
+
+  useEffect(() => {
+    socket.current = io(ENDPOINT)
+  }, [])
+
   return (
     <>
       {selectedChat ? (
