@@ -12,7 +12,7 @@ import Login from "../login/Login"
 import Register from "../register/Register"
 import logo from "../../assets/logo.png"
 import { useNavigate } from "react-router-dom"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { useEffect } from "react"
 import { AuthContext } from "../../context/AuthContext/AuthContext"
 
@@ -34,7 +34,7 @@ const Home = () => {
           w="100%"
           p={4}
           borderRadius="lg"
-          m="70px auto 15px auto"
+          m="160px auto 15px auto"
         >
           <div className="brand">
             <img className="logoImg" src={logo} alt="logo" />

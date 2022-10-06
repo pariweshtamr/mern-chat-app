@@ -24,3 +24,8 @@ export const loginUser = async (userCredentials, dispatch) => {
     dispatch({ type: "LOGIN_FAILURE", payload: err })
   }
 }
+
+export const logoutUser = async (dispatch) => {
+  localStorage.removeItem("userInfo")
+  dispatch({ type: "LOGOUT_SUCCESS", payload: {} })
+}

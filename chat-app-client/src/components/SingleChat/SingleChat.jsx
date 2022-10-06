@@ -78,8 +78,8 @@ const SingleChat = () => {
   }
 
   const sendMessage = async (e) => {
-    socket.current?.emit("stop typing", selectedChat._id)
     if (e.key === "Enter" && newMessage) {
+      socket.current?.emit("stop typing", selectedChat._id)
       try {
         setNewMessage("")
         const data = await sendNewMessage(

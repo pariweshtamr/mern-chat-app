@@ -17,7 +17,6 @@ import {
   Input,
   useToast,
   Spinner,
-  effect,
 } from "@chakra-ui/react"
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons"
 import { BsSearch } from "react-icons/bs"
@@ -33,9 +32,11 @@ import ChatLoading from "../ChatLoading/ChatLoading"
 import { AuthContext } from "../../context/AuthContext/AuthContext"
 import { getSender } from "../../config/ChatLogic"
 import NotificationBadge from "react-notification-badge"
+import { Effect } from "react-notification-badge"
+import { logoutUser } from "../../api/authApi"
 
 const SideDrawer = () => {
-  const { user } = useContext(AuthContext)
+  const { user, dispatch } = useContext(AuthContext)
   const { setSelectedChat, chats, setChats, notification, setNotification } =
     ChatState()
   const { token } = user
@@ -94,7 +95,7 @@ const SideDrawer = () => {
   }
 
   const logoutHandler = () => {
-    localStorage.removeItem("userInfo")
+    logoutUser(dispatch)
     navigate("/")
   }
   return (
@@ -128,9 +129,10 @@ const SideDrawer = () => {
             <MenuButton p={1}>
               <NotificationBadge
                 count={notification.length}
-                effect={effect.scale}
+                effect={Effect.scale}
               />
-              <BellIcon mr={2} fontSize="2xl" />
+
+              <BellIcon mr={2} fontSize="2xl" color="gold" />
             </MenuButton>
             <MenuList px={2}>
               {!notification.length && "No new messages"}

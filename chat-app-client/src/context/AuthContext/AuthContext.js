@@ -5,6 +5,7 @@ import AuthReducer from "./AuthReducer"
 const INITIAL_STATE = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,
   isFetching: false,
+  isLoggedIn: false,
   err: false,
 }
 
@@ -22,6 +23,7 @@ export const AuthContextProvider = ({ children }) => {
       value={{
         user: state.user,
         isFetching: state.isFetching,
+        isLoggedIn: state.isLoggedIn,
         err: state.err,
         dispatch,
       }}

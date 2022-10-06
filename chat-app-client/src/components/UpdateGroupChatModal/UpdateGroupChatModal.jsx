@@ -16,13 +16,14 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import {
   addUserToExistingGroup,
   removeUserFromExistingGroup,
   renameGroupChat,
 } from "../../api/chatApi"
 import { getSearchedUsers } from "../../api/userApi"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 import { ChatState } from "../../context/ChatContext"
 import UserBadgeItem from "../UserAvatar/UserBadgeItem"
 import UserListItem from "../UserAvatar/UserListItem"
@@ -34,8 +35,9 @@ const UpdateGroupChatModal = ({ fetchMessages }) => {
   const [searchResult, setSearchResult] = useState([])
   const [loading, setLoading] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false)
-  const { selectedChat, setSelectedChat, user, fetchAgain, setFetchAgain } =
+  const { selectedChat, setSelectedChat, fetchAgain, setFetchAgain } =
     ChatState()
+  const { user } = useContext(AuthContext)
   const { token } = user
   const toast = useToast()
 

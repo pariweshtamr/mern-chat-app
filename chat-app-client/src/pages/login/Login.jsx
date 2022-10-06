@@ -29,6 +29,7 @@ const Login = () => {
     }
 
     loginUser({ email, password }, dispatch)
+    navigate("/chats")
   }
 
   return (
