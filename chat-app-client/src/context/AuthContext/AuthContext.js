@@ -6,7 +6,7 @@ const INITIAL_STATE = {
   user: JSON.parse(localStorage.getItem("userInfo")) || null,
   isFetching: false,
   isLoggedIn: false,
-  err: false,
+  err: {},
 }
 
 export const AuthContext = createContext(INITIAL_STATE)

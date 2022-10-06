@@ -6,19 +6,19 @@ import Chat from "./pages/Chat/Chat"
 import Home from "./pages/home/Home"
 
 function App() {
-  const { user } = useContext(AuthContext)
+  const { user, isLoggedIn } = useContext(AuthContext)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoggedIn) {
       navigate("/")
     }
   }, [])
 
   return (
     <Routes>
-      <Route path="/chats" element={user && <Chat />}></Route>
-      <Route path="/" element={<Home />}></Route>
+      <Route path="/chats" element={isLoggedIn && <Chat />}></Route>
+      <Route path="/" exact element={<Home />}></Route>
     </Routes>
   )
 }

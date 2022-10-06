@@ -66,17 +66,18 @@ authRouter.post("/login", async function (req, res, next) {
           user,
           token: await generateToken(user._id),
         })
-      } else {
-        next(createError(400, "Wrong username or password!"))
-        res.status(400).json({
-          status: "error",
-          message: "Wrong username or password!",
-        })
       }
     }
-    return next(createError(404, "User not found!"))
+    res.status(401).json({
+      status: "error",
+      message: "Wrong username or password!",
+    })
   } catch (error) {
     next(error)
+    res.status(500).json({
+      status: "error",
+      message: "Wrong Username or Password!",
+    })
   }
 })
 

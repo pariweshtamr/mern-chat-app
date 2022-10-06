@@ -15,21 +15,51 @@ const Login = () => {
   const [show, setShow] = useState(false)
   const [error, setError] = useState(false)
   const [email, setEmail] = useState("")
+  const [loading, setLoading] = useState(false)
   const [password, setPassword] = useState("testPassword.7")
   const { isFetching, err, dispatch } = useContext(AuthContext)
 
   const handleOnSubmit = async (e) => {
     e.preventDefault()
-    if (email === "" || password === "") {
+    setLoading(true)
+    if (!email || !password) {
       toast({
         status: "error",
         description: "Please enter your email and password.",
+        duration: 3000,
+        position: "bottom",
       })
+      setLoading(false)
       return
     }
+    try {
+      const login = await loginUser({ email, password }, dispatch)
+      setLoading(false)
 
-    loginUser({ email, password }, dispatch)
-    navigate("/chats")
+      if (login.status === "success") {
+        navigate("/chats")
+      }
+
+      toast({
+        title: "Error Occured!",
+        description: login.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      })
+    } catch (error) {
+      console.log(error)
+      toast({
+        title: "Error Occured!",
+        description: "",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      })
+      setLoading(false)
+    }
   }
 
   return (
@@ -62,7 +92,7 @@ const Login = () => {
 
           {error && <span>Something went wrong!</span>}
 
-          <button type="submit">{isFetching ? <Spinner /> : "Login"}</button>
+          <button type="submit">{loading ? <Spinner /> : "Login"}</button>
           <span className="form-footer">
             Don't have an account? <Link to="/register">Register</Link>
           </span>

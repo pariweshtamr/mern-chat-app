@@ -19,9 +19,17 @@ export const loginUser = async (userCredentials, dispatch) => {
   dispatch({ type: "LOGIN_START" })
   try {
     const { data } = await axios.post(authEp + "/login", userCredentials)
-    dispatch({ type: "LOGIN_SUCCESS", payload: data })
+    if (data.status === "success") {
+      dispatch({ type: "LOGIN_SUCCESS", payload: data })
+      return {
+        status: "success",
+      }
+    }
   } catch (err) {
-    dispatch({ type: "LOGIN_FAILURE", payload: err })
+    return {
+      status: "error",
+      message: "Invalid login details",
+    }
   }
 }
 
