@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Container, useToast, Spinner } from "@chakra-ui/react"
 import { Link, useNavigate } from "react-router-dom"
 import { FormContainer } from "./RegisterStyles"
@@ -7,6 +7,7 @@ import addImage from "../../assets/addAvatar.png"
 import { BiShow, BiHide } from "react-icons/bi"
 import axios from "axios"
 import { registerUser } from "../../api/authApi"
+import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const Register = () => {
   const [error, setError] = useState(false)
@@ -19,6 +20,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [file, setFile] = useState("")
   const toast = useToast()
+  const { dispatch } = useContext(AuthContext)
 
   const postImg = async (img) => {
     try {
@@ -79,12 +81,15 @@ const Register = () => {
 
     try {
       setLoading(true)
-      const register = await registerUser({
-        displayName,
-        password,
-        email,
-        file,
-      })
+      const register = await registerUser(
+        {
+          displayName,
+          password,
+          email,
+          file,
+        },
+        dispatch
+      )
 
       register.status === "success" &&
         toast({
@@ -92,7 +97,7 @@ const Register = () => {
           status: "success",
         })
 
-      localStorage.setItem("userInfo", JSON.stringify(register))
+      // localStorage.setItem("userInfo", JSON.stringify(register))
 
       setLoading(false)
       setDisplayName("")

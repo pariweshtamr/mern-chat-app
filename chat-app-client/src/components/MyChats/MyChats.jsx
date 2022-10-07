@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons"
-import { Box, Button, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Stack, Text, useToast } from "@chakra-ui/react"
 import React, { useContext } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -10,11 +10,11 @@ import { ChatState } from "../../context/ChatContext"
 import ChatLoading from "../ChatLoading/ChatLoading"
 import GroupChatModal from "../GroupChatModal/GroupChatModal"
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const { user } = useContext(AuthContext)
-  const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } =
-    ChatState()
+  const { selectedChat, setSelectedChat, chats, setChats } = ChatState()
   const { token } = user
+  const toast = useToast()
   const [loggedUser, setLoggedUser] = useState()
 
   const fetchChats = async () => {
@@ -22,7 +22,14 @@ const MyChats = () => {
       const data = await fetchUserChats(token)
       setChats(data)
     } catch (error) {
-      console.log(error)
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the chats",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom-left",
+      })
     }
   }
 
@@ -90,6 +97,14 @@ const MyChats = () => {
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
+                {chat.latestMessage && (
+                  <Text fontSize="xs">
+                    <b>{chat?.latestMessage?.sender?.displayName} : </b>
+                    {chat?.latestMessage?.content.length > 50
+                      ? chat?.latestMessage?.content.substring(0, 51) + "..."
+                      : chat?.latestMessage?.content}
+                  </Text>
+                )}
               </Box>
             ))}
           </Stack>

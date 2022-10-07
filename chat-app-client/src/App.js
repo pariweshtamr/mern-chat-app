@@ -17,8 +17,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/chats" element={isLoggedIn && <Chat />}></Route>
       <Route path="/" exact element={<Home />}></Route>
+      <Route path="/chats" element={<Chat />}></Route>
     </Routes>
   )
 }

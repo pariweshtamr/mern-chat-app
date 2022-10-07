@@ -6,12 +6,22 @@ const rootUrl =
 
 const authEp = rootUrl + "/auth"
 
-export const registerUser = async (newUser) => {
+export const registerUser = async (newUser, dispatch) => {
+  dispatch({ type: "REGISTER_START" })
   try {
     const { data } = await axios.post(authEp + "/register", newUser)
-    return data
+    dispatch({ type: "REGISTER_SUCCESS", payload: data })
+    return {
+      status: data.status,
+      message: data.message,
+      data,
+    }
   } catch (error) {
-    return error.response.data
+    dispatch({ type: "REGISTER_FAILURE", payload: error })
+    return {
+      status: "error",
+      message: "Unable to register! Please try again later...",
+    }
   }
 }
 
@@ -22,7 +32,8 @@ export const loginUser = async (userCredentials, dispatch) => {
     if (data.status === "success") {
       dispatch({ type: "LOGIN_SUCCESS", payload: data })
       return {
-        status: "success",
+        status: data.status,
+        data,
       }
     }
   } catch (err) {

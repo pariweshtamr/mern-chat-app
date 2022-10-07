@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext } from "react"
 import { ChatStyles } from "./chatStyles"
 import MyChats from "../../components/MyChats/MyChats"
 import ChatBox from "../../components/ChatBox/ChatBox"
@@ -8,6 +8,7 @@ import SideDrawer from "../../components/SideDrawer/SideDrawer"
 import { AuthContext } from "../../context/AuthContext/AuthContext"
 
 const Chat = () => {
+  const { user } = useContext(AuthContext)
   return (
     <ChatStyles>
       <SideDrawer />

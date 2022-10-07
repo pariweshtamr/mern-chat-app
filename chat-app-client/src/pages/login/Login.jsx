@@ -40,14 +40,16 @@ const Login = () => {
         navigate("/chats")
       }
 
-      toast({
-        title: "Error Occured!",
-        description: login.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "bottom",
-      })
+      if (login.status === "error") {
+        toast({
+          title: "Error Occured!",
+          description: login.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "bottom",
+        })
+      }
     } catch (error) {
       console.log(error)
       toast({
